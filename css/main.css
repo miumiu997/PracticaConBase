@@ -1,0 +1,568 @@
+
+/*nav bar*/ 
+.SignIn{
+	background-color: #F3D54E; 
+	font-family: Arial;
+}
+
+.navbar-default{
+	background-color: #5D5E5B;
+}
+
+.navbar-collapse {
+    background-color: #5D5E5B;
+}
+
+.marriottLogoNav{
+	width: 160px;
+	height: 90px;
+}
+
+.NavEventPlanner{
+	color: white; 
+	font-size: 30px; 
+	margin-left: 20px; 
+	margin-top: 23px; 
+	font-family: Ariel;
+} 
+
+/*Top Title*/
+.Title{ 
+	font-size: 50px;  
+	color: #5D5E5B;
+	text-align: center; 
+	font-family: ariel;
+}  
+
+
+.line{ 
+	text-align: center; 
+	display: block;
+    margin: auto;
+    width: 60%;  
+    margin-left: 25%; 
+    margin-top: -5%; 
+    margin-bottom: 2%;
+
+} 
+
+.lineSmall{ 
+	text-align: center; 
+	display: block;
+    margin: auto;
+    width: 40%;  
+    margin-left: 33%; 
+    margin-top: -5%; 
+    margin-bottom: 2%;
+}
+
+/*Rewards*/
+
+.Rewards{ 
+	font-size: 20px; 
+	color: #78BE20; 
+	float: right; 
+	margin-right: 20%; 
+	font-family: Arial; 
+}  
+
+.RewardsLogo{
+	width:10%; 
+	float: left;
+} 
+
+.bottomReward{ 
+	margin-bottom: 5%
+} 
+
+/*Next Button*/
+
+.button{
+	color: white;
+	background-color: #4E4B48; 
+	border: none; 
+	padding: 10px 30px; 
+	margin-top: 15%; 
+	margin-left: 70%;
+
+} 
+
+/*Footer*/
+
+.marriottLogoFooter{ 
+	width: 5%; 
+	margin-left: 80%;  
+}
+
+#footerID{ 
+	font-size: 12px; 
+	font-family: Arial;  
+	margin-top: -2%;
+}
+
+#Ffooter{
+	background-color: #373734; 
+	text-align: center; 
+	color: white; 
+	height: 7%;  
+	padding: 1em; 
+	font-family: Arial;  
+	position: fixed; 
+   	bottom: 0px; 
+   	width: 100%;
+}
+
+/*Yes or No question*/
+.question{
+	font-family: arial; 
+	color: #78BE20;  
+	font-size: 160%;
+}
+
+.questionDiv{
+	text-align: center;
+}
+
+/*Yes or No radio buttons*/
+
+.radio1{
+    float: left;
+    margin-left:30%;
+}
+
+.radio2{
+    float: right;
+    margin-right:30%;
+} 
+
+.radiobuttonLabelYes{
+	color:#537A08; 
+	font-family: Arial; 
+	font-size: 30px; 
+} 
+
+.radiobuttonLabelNo{
+	color:#537A08; 
+	font-family: arial; 
+	font-size: 30px;   
+} 
+
+.radiobuttonYes{
+	margin-left: 10%; 
+	margin-left: 10%; 
+}
+ 
+.radiobuttonNo{
+	margin-left: 10%; 
+	margin-left: 10%; 
+}
+
+.radio1{
+   float: left;
+   margin-left:40%;
+}
+
+.radio2{
+   float: right;
+   margin-right:40%;
+}
+
+/* Sleeping Beds */
+.marriottBeds{ 
+	height: 50%; 
+	width: 60%;
+}
+
+.Beds, .EventRooms, .RoomSetups{ 
+	text-align: center;
+}
+
+.RoomDates{ 
+	color: #78BE20;  
+	font-size: 20px;
+	float: left;  
+}
+
+/* Event Rooms */  
+
+.marriottEventRooms, .marriottRoomSetups{  
+	width: 65%; 
+	height: 65%;
+}  
+
+.EventRoomLabel, .RoomSetupLabel{  
+	font-size: 20px;
+}
+
+.EventSetupLabel{ 
+	font-size: 80%; 
+	font-family: arial; 
+	color:#78BE20;
+} 
+
+.viewinfo{ 
+	text-align: left; 
+	background-color:#F3D54E;  
+	color:#4E4B48;
+}
+
+.viewinfo2{ 
+    text-align: left;
+	background-color:#F3D54E;  
+	color:#4E4B48;
+    width:100%;
+}
+
+h2{ 
+	font-size: 12px; 
+	font-family: arial;
+} 
+
+input[type='checkbox'] {
+    -webkit-appearance:none;
+    width:25px;
+    height:25px;
+    background:white;
+    border-radius:1px;
+    border:2px solid #555;
+} 
+input[type='checkbox']:checked {
+    background: #78BE20;
+}
+
+/*SignIn*/
+#SignInForm{  
+	text-align: center;
+} 
+
+/*Home*/ 
+.marriottHomePage{ 
+	width: 84%; 
+	margin-top: -2%; 
+}
+
+#MainOptions{ 
+   position: absolute;
+   top: 2%;
+   left: 3%;  
+   width: 23%;
+   margin-top: 10%; 
+   margin-left: 76%;  
+}
+ 
+#ConstructEvent{ 
+	margin-left: 15%;
+	text-align: center;  
+	margin-bottom: 10%;
+} 
+
+#ConstructEventText{ 
+	font-size: 24px;
+	font-family: Arial; 
+}  
+
+#confirmationInput, #MarriottRewardsInput{ 
+	width:70%; 
+	margin-top: 5%;
+}
+
+#ModifyEventBtn{ 
+	width: 300%;
+}
+
+#NewEventBtn{
+	width: 300%;
+}
+
+.doubleline{
+	width: 60%; 
+	height:10%;
+}  
+
+.RewardsLogoHome{ 
+	width:35%; 
+	height:35%; 
+	margin-top: 10%;
+}
+
+.RewardsHome{
+	font-size: 14px;
+	text-align:center;
+	margin-left: 20%;
+	margin-right: 20%;
+	color:#537A08;
+}
+
+/*Modal*/ 
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 100px; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 0;
+    border: 1px solid #888;
+    width: 80%;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.4s;
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.modal-header {
+    padding: 2px 16px;
+    background-color: #78BE20;
+    color: white;
+    font-family: Arial;
+}
+
+.modal-body {
+	padding: 2px 16px; 
+	font-family: Arial;  
+} 
+
+.ModalImage{
+	width: 100%; 
+	margin-top: 5%; 
+	margin-right: 30%;
+}
+
+.ModalRoomSetupImage{
+	width:160%;
+	height:160%;
+}
+
+.TableclothModalImg{
+	width: 60%; 
+	height: 60%; 
+} 
+
+.MaxModal{ 
+	margin-left: 25%;
+}  
+
+.modalTitle{ 
+	font-size: 140%;  
+	color: #373734;  
+	font-family: arial;
+}
+
+/* Amenities */
+.AmenitiesImg{
+	width: 150px; 
+	height: 150px;  
+} 
+
+.OtherInput{  
+	width:100px; 
+	height: 500px; 
+	margin-right: 100px;
+}
+
+/*Menu*/ 
+.PackageLabel{ 
+	color:#78BE20; 
+	font-size: 150%;
+}
+
+/*Av Aids*/ 
+.AvAidOptions{ 
+	font-size: 120%;
+} 
+
+/*Comments*/ 
+.AddBtn{ 
+	color: #5D5E5B;
+	background-color: #F3D54E; 
+	border: none; 
+	padding: 10px 30px;  
+	margin-top: 5%;
+	margin-left: -65%;
+}  
+
+.RemoveBtn{
+	color:#5D5E5B;
+} 
+
+.RemoveBtn:hover{
+	color:#5D5E5B; 
+	margin-left: 1%;
+}
+
+.CommentInput{ 
+	width: 40%; 
+	height:100%; 
+	margin-left: -60%;  
+	margin-top: 2%; 
+
+} 
+
+.ColumnTitle{ 
+	font-size: 120%;  
+	color: #373734;  
+	font-family: arial;
+}
+
+.MenuLabel{ 
+	font-size: 100%;
+}  
+
+.menuPhotos{  
+	width: 60%; 
+	height: 60%;
+}   
+
+.GeneralInfo{  
+	margin-bottom: 30px;
+}
+
+.btnNext{ 
+	margin-top: -60%;
+}
+
+.alignLeft{ 
+	text-align: left;
+} 
+
+.EventinformationTxt{  
+	font-size: 100%; 
+	text-align: left;
+}
+footer{
+	background-color: #373734; 
+	text-align: center; 
+	color: white; 
+	height: 7%;  
+	padding: 1em; 
+	font-family: Arial;  
+	position: fixed; 
+   	bottom: 0px; 
+   	width: 100%;
+}
+
+select{
+    width: 100%; 
+    height: 40px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+html, body{
+	min-height:100%;  
+}
+
+
+form{ 
+	margin-left: 10%;
+	margin-right: 10%;  
+	margin-top: 2%;
+	text-align: center;  
+
+}
+
+label{ 
+	color: #4E4B48;
+
+
+nav ul {
+	background: #5D5E5B; 
+	padding: 0 20px;
+	list-style: none;
+	position: relative;
+	display: inline-table; 
+	height: 90px;
+}
+
+nav ul:after {
+		content: ""; clear: both; display: block;
+}
+
+nav ul li {
+	float: left;
+}
+
+nav ul li:hover {
+		background: #5D5E5B;
+
+	}
+
+nav ul li:hover a {
+			color: white;
+}
+	
+
+nav ul li a {
+		display: block; padding: 25px 40px;
+		color: white; text-decoration: none;
+	}
+
+nav ul ul {
+	background:#5D5E5B; border-radius: 0px; padding: 0;
+	position: absolute; top: 100%;
+}
+
+nav ul ul li {
+		float: none; 
+		border-top: 1px solid #5D5E5B;
+		border-bottom: 1px solid #5D5E5B;
+		position: relative;
+	}
+
+nav ul ul li a {
+			padding: 15px 40px;
+			color: white;
+		}	
+
+nav ul ul li a:hover {
+    background:#5D5E5B;
+}
+
+nav ul ul ul {
+	position: absolute; left: 100%; top:0;
+}
+
+
