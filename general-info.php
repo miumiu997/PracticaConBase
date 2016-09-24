@@ -33,32 +33,30 @@
     <body>
         <div class="row">
 
-            <nav class="navbar navbar-default">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    <a href="home.html"><img class="marriottLogoNav" height="40px" width="60px" src="logos/Marriot%20Logo%20NavBar.png" /></a>
-                </div>
+    <nav class="navbar navbar-default">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="home.html"><img class="marriottLogoNav" height="40px" width="60px" src="logos/Marriot%20Logo%20NavBar.png" /></a>
+        </div>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <H1 class="NavEventPlanner"> General Information </H1>
-                        </li>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <li><H1 class="NavEventPlanner"> E-Vent Planner </H1></li> 
 
-                    </ul>
+          </ul>
 
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="SignIn"><a href="SignIn.html">Sign In</a></li>
-                    </ul>
-                </div>
-                <!-- /.navbar-collapse -->
-            </nav>
+          <ul class="nav navbar-nav navbar-right">
+            <li class="SignIn"><a href="SignIn.html">Sign In</a></li>
+          </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
 
             <div class="GeneralInfo">
                 <div class="row alignLeft">
