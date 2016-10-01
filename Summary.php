@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php
-    // Start the session
-    session_start();
-    $_SESSION['comments'] = $_GET['mytext'];
-?>
+    <?php
+        // Start the session
+        session_start();
+        $_SESSION['comments'] = $_GET['mytext'];
+    ?>
     
 <head>
     <meta charset="utf-8">

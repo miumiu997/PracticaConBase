@@ -507,78 +507,55 @@
                     </div>
 
                     <div class="modal-body ">
-                        <div class="row" id="categoryOptions" >
+                        <div class="row" id="categoryOptions">
                             <!-- This is repeated by the amount of category options there are -->
 
                             <form method="get" action="AvAids.html">
                                 <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Courtyard Breakfast</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
 
-                                    </div>
+                                    <?php
+                                    
+                                        $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 1"; // breakfast id = 1
+                                        $result = mysqli_query($conn, $sql) or die(mysql_error());
 
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Variety of fruit</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Your choice of eggs</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Variety of cheese and meats </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Bacon or Ham </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Gallo Pinto </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Plantain or Cheese </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Toast, butter or jam </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Corn Tortillas</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- 3 choices of beverages</p>
-                                        </div>
-                                    </div>
+                                        while ($row = mysqli_fetch_assoc($result)) {
+                                        
+                                            echo '<div class="form-group row EventRooms">';
+                                            echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                            echo '  <input class="col-md-2" id=radiobreakfast type="radio" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
+                                            echo '</div>';
+                                            
+                                            $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+                                            
+                                            $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+                                            
+                                            $i = 0;
+                                            
+                                            echo '<div class="form-group row EventRooms">';
+                                            while ($row2 = mysqli_fetch_assoc($result2)) {
+                                                
+                                                echo '  <div class="col-md-4">';
+                                                echo '      <p>- '. $row2['Name'] .'</p>';
+                                                echo '  </div>';
+                                                
+                                                $i = $i + 1;
 
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Working Breakfast</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
+                                                if ($i % 3 == 0) {
+                                                    echo "</div>";
+                                                    echo '<div class="form-group row EventRooms">';
+                                                }
+                                            }
+                                            echo '</div>';
+                                        }
+                                    
+                                    ?>
 
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>Your choice of bread</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>Fresh Fruit Parfait</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>Yogurt</p>
-                                        </div>
-                                    </div>
 
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>Honey, butter or Jam</p>
-                                        </div>
-                                    </div>
                                     <!-- This is repeated by the amount of amenities there are  -->
 
                                     <div class="form-group row">
                                         <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
+                                        <input class="col-md-2" id=radiobreakfast type="radio" name="radiobreakfast" value="other"></input>
                                     </div>
 
                                     <div class="row">
@@ -587,12 +564,7 @@
                                         </div>
 
                                     </div>
-
                                 </div>
-
-
-
-
                             </form>
                         </div>
                     </div>
@@ -608,7 +580,7 @@
                     </div>
 
                     <div class="modal-body ">
-                        <div class="row" id="categoryOptions" >
+                        <div class="row" id="categoryOptions">
                             <!-- This is repeated by the amount of category options there are -->
 
                             <form method="get" action="AvAids.html">
@@ -709,7 +681,7 @@
                     </div>
 
                     <div class="modal-body ">
-                        <div class="row" id="categoryOptions" >
+                        <div class="row" id="categoryOptions">
                             <!-- This is repeated by the amount of category options there are -->
 
                             <form method="get" action="AvAids.html">
@@ -778,7 +750,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="AfternoonCoffeeModal" class="modal">
                 <div class="modal-content">
@@ -789,7 +761,7 @@
                     </div>
 
                     <div class="modal-body ">
-                        <div class="row" id="categoryOptions" >
+                        <div class="row" id="categoryOptions">
                             <!-- This is repeated by the amount of category options there are -->
 
                             <form method="get" action="AvAids.html">
@@ -858,7 +830,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="DinnerModal" class="modal">
                 <div class="modal-content">
@@ -869,7 +841,7 @@
                     </div>
 
                     <div class="modal-body ">
-                        <div class="row" id="categoryOptions" >
+                        <div class="row" id="categoryOptions">
                             <!-- This is repeated by the amount of category options there are -->
 
                             <form method="get" action="AvAids.html">
@@ -1002,7 +974,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="AvAidsModal2" class="modal">
                 <!-- Modal content -->
@@ -1068,7 +1040,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="AvAidsModal3" class="modal">
                 <!-- Modal content -->
@@ -1092,49 +1064,47 @@
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                    echo '<div class="form-group row EventRooms">';
-                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                    $i = 0;
-                                    $result = mysqli_query($conn, $sql) or die('no se puedo');
-                                
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    
-                                        echo '<div class="col-md-4 AvAidOptions">';
-                                        echo '  <p>'. $row['Name'] .'</p>';
-                                        echo '</div>';
-                                        echo '<div class="col-md-1">';
-                                        echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                        echo '</div>';
-                                        
-                                        $i = $i + 1;
-                                        if ($i % 2 == 0){
-                                            echo "</div>";
-                                            echo '<div class="form-group row EventRooms">';
+                                        echo '<div class="form-group row EventRooms">';
+                                        $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                        $i = 0;
+                                        $result = mysqli_query($conn, $sql) or die('no se puedo');
+
+                                        while ($row = mysqli_fetch_assoc($result)) {
+
+                                            echo '<div class="col-md-4 AvAidOptions">';
+                                            echo '  <p>'. $row['Name'] .'</p>';
+                                            echo '</div>';
+                                            echo '<div class="col-md-1">';
+                                            echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
+                                            echo '</div>';
+
+                                            $i = $i + 1;
+                                            if ($i % 2 == 0){
+                                                echo "</div>";
+                                                echo '<div class="form-group row EventRooms">';
+                                            }
+
                                         }
-                                    
-                                    }
-                                
-                                    echo "</div>";
-                                
-                                ?>
 
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
+                                        echo "</div>";
+
+                                    ?>
+
+                                    <div class="form-group row">
+                                        <label class="col-md-2 col-form-label PackageLabel">Other</label>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
-                                        </div>
-
+                                    </div>
                                 </div>
-
                             </form>
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="AvAidsModal4" class="modal">
                 <!-- Modal content -->
@@ -1266,7 +1236,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
 
             <div id="AvAidsModal6" class="modal">
@@ -1418,7 +1388,7 @@
                     </div>
                 </div>
             </div>
-                
+
             <div id="AmenitiesModal4" class="modal">
                 <!-- Modal content -->
                 <div class="modal-content">
@@ -1445,7 +1415,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="AmenitiesModal5" class="modal">
                 <!-- Modal content -->
@@ -1473,7 +1443,7 @@
                         </div>
                     </div>
                 </div>
-            </div> 
+            </div>
 
             <div id="AmenitiesModal6" class="modal">
                 <!-- Modal content -->
@@ -1509,287 +1479,230 @@
             </footer>
 
 
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-                <script>
-                    // Get the modal
-                    var modalMenu = document.getElementById('MenuModal');
-                    var modalBreakfast = document.getElementById('BreakfastModal');
-                    var modalMorningCoffee = document.getElementById('MorningCoffeeModal'); 
-                    var modalLunch = document.getElementById('LunchModal'); 
-                    var modalAfternoonCoffee = document.getElementById('AfternoonCoffeeModal'); 
-                    var modalDinner = document.getElementById('DinnerModal'); 
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script>
+                // Get the modal
+                var modalMenu = document.getElementById('MenuModal');
+                var modalBreakfast = document.getElementById('BreakfastModal');
+                var modalMorningCoffee = document.getElementById('MorningCoffeeModal');
+                var modalLunch = document.getElementById('LunchModal');
+                var modalAfternoonCoffee = document.getElementById('AfternoonCoffeeModal');
+                var modalDinner = document.getElementById('DinnerModal');
+                var modalAvAids = document.getElementById('AvAidsModal');
+                var modalAvAids2 = document.getElementById('AvAidsModal2');
+                var modalAvAids3 = document.getElementById('AvAidsModal3');
+                var modalAvAids4 = document.getElementById('AvAidsModal4');
+                var modalAvAids5 = document.getElementById('AvAidsModal5');
+                var modalAvAids6 = document.getElementById('AvAidsModal6');
+                var modalAmenities = document.getElementById('AmenitiesModal');
+                var modalAmenities2 = document.getElementById('AmenitiesModal2');
+                var modalAmenities3 = document.getElementById('AmenitiesModal3');
+                var modalAmenities4 = document.getElementById('AmenitiesModal4');
+                var modalAmenities5 = document.getElementById('AmenitiesModal5');
+                var modalAmenities6 = document.getElementById('AmenitiesModal6');
+                // Get the button that opens the modal
+                var btnMenu = document.getElementById("myBtnMenu");
+                var btnMenu2 = document.getElementById("myBtnMenu2");
+                var btnMenu3 = document.getElementById("myBtnMenu3");
+                var btnMenu4 = document.getElementById("myBtnMenu4");
+                var btnMenu5 = document.getElementById("myBtnMenu5");
+                var btnMenu6 = document.getElementById("myBtnMenu6");
+                var btnAvAids = document.getElementById("myBtnAvAids");
+                var btnAvAids2 = document.getElementById("myBtnAvAids2");
+                var btnAvAids3 = document.getElementById("myBtnAvAids3");
+                var btnAvAids4 = document.getElementById("myBtnAvAids4");
+                var btnAvAids5 = document.getElementById("myBtnAvAids5");
+                var btnAvAids6 = document.getElementById("myBtnAvAids6");
+                var btnAmenities = document.getElementById("myBtnAmenities");
+                var btnAmenities2 = document.getElementById("myBtnAmenities2");
+                var btnAmenities3 = document.getElementById("myBtnAmenities3");
+                var btnAmenities4 = document.getElementById("myBtnAmenities4");
+                var btnAmenities5 = document.getElementById("myBtnAmenities5");
+                var btnAmenities6 = document.getElementById("myBtnAmenities6");
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
 
-                    var modalAvAids = document.getElementById('AvAidsModal'); 
-                    var modalAvAids2 = document.getElementById('AvAidsModal2'); 
-                    var modalAvAids3 = document.getElementById('AvAidsModal3'); 
-                    var modalAvAids4 = document.getElementById('AvAidsModal4'); 
-                    var modalAvAids5 = document.getElementById('AvAidsModal5'); 
-                    var modalAvAids6 = document.getElementById('AvAidsModal6'); 
-
-                    var modalAmenities = document.getElementById('AmenitiesModal');
-                    var modalAmenities2 = document.getElementById('AmenitiesModal2');
-                    var modalAmenities3 = document.getElementById('AmenitiesModal3');
-                    var modalAmenities4 = document.getElementById('AmenitiesModal4');
-                    var modalAmenities5 = document.getElementById('AmenitiesModal5');
-                    var modalAmenities6 = document.getElementById('AmenitiesModal6');
-
-
-                    // Get the button that opens the modal
-                    var btnMenu = document.getElementById("myBtnMenu");
-                    var btnMenu2 = document.getElementById("myBtnMenu2");
-                    var btnMenu3 = document.getElementById("myBtnMenu3");
-                    var btnMenu4 = document.getElementById("myBtnMenu4");
-                    var btnMenu5 = document.getElementById("myBtnMenu5");
-                    var btnMenu6 = document.getElementById("myBtnMenu6");
-
-                    var btnAvAids = document.getElementById("myBtnAvAids");
-                    var btnAvAids2 = document.getElementById("myBtnAvAids2");
-                    var btnAvAids3 = document.getElementById("myBtnAvAids3");
-                    var btnAvAids4 = document.getElementById("myBtnAvAids4");
-                    var btnAvAids5 = document.getElementById("myBtnAvAids5");
-                    var btnAvAids6 = document.getElementById("myBtnAvAids6");
-
-                    var btnAmenities = document.getElementById("myBtnAmenities");
-                    var btnAmenities2 = document.getElementById("myBtnAmenities2");
-                    var btnAmenities3 = document.getElementById("myBtnAmenities3");
-                    var btnAmenities4 = document.getElementById("myBtnAmenities4");
-                    var btnAmenities5 = document.getElementById("myBtnAmenities5");
-                    var btnAmenities6 = document.getElementById("myBtnAmenities6");
-
-                    // Get the <span> element that closes the modal
-                    var span = document.getElementsByClassName("close")[0];
-                    
-                    var functionModalMenu = function () {
-                        modalMenu.style.display = "block";
-                    }
-
-                    var functionModalBreakfast = function () {
-                        modalBreakfast.style.display = "block";
-                    }  
-
-                    var functionMorningCoffee = function () {
-                        modalMorningCoffee.style.display = "block";
-                    } 
-
-                    var functionLunch = function () {
-                        modalLunch.style.display = "block";
-                    } 
-
-                    var functionAfternoonCoffee = function () { 
-                        modalAfternoonCoffee.style.display = "block";
-                    }
-
-                    var functionDinner = function (){ 
-                        modalDinner.style.display = "block";
-                    }
-
-
-                    var functionModalAvAids = function () {
-                        modalAvAids.style.display = "block";
-                    } 
-
-                    var functionModalAvAids2 = function () {
-                        modalAvAids2.style.display = "block";
-                    } 
-
-                    var functionModalAvAids3 = function () {
-                        modalAvAids3.style.display = "block";
-                    }
-
-                    var functionModalAvAids4 = function () {
-                        modalAvAids4.style.display = "block";
-                    } 
-
-                    var functionModalAvAids5 = function () {
-                        modalAvAids5.style.display = "block";
-                    }  
-
-                    var functionModalAvAids6 = function () {
-                        modalAvAids6.style.display = "block";
-                    }
-
-                    var functionModalAmmenities = function () {
-                        modalAmenities.style.display = "block";
-                    }   
-
-                    var functionModalAmmenities2 = function () {
-                        modalAmenities2.style.display = "block";
-                    }   
-
-                    var functionModalAmmenities3 = function () {
-                        modalAmenities3.style.display = "block";
-                    }   
-
-                    var functionModalAmmenities4 = function () {
-                        modalAmenities4.style.display = "block";
-                    }  
-
-                    var functionModalAmmenities5 = function () {
-                        modalAmenities5.style.display = "block";
-                    }  
-
-                    var functionModalAmmenities6 = function () {
+                var functionModalMenu = function () {
+                    modalMenu.style.display = "block";
+                }
+                var functionModalBreakfast = function () {
+                    modalBreakfast.style.display = "block";
+                }
+                var functionMorningCoffee = function () {
+                    modalMorningCoffee.style.display = "block";
+                }
+                var functionLunch = function () {
+                    modalLunch.style.display = "block";
+                }
+                var functionAfternoonCoffee = function () {
+                    modalAfternoonCoffee.style.display = "block";
+                }
+                var functionDinner = function () {
+                    modalDinner.style.display = "block";
+                }
+                var functionModalAvAids = function () {
+                    modalAvAids.style.display = "block";
+                }
+                var functionModalAvAids2 = function () {
+                    modalAvAids2.style.display = "block";
+                }
+                var functionModalAvAids3 = function () {
+                    modalAvAids3.style.display = "block";
+                }
+                var functionModalAvAids4 = function () {
+                    modalAvAids4.style.display = "block";
+                }
+                var functionModalAvAids5 = function () {
+                    modalAvAids5.style.display = "block";
+                }
+                var functionModalAvAids6 = function () {
+                    modalAvAids6.style.display = "block";
+                }
+                var functionModalAmmenities = function () {
+                    modalAmenities.style.display = "block";
+                }
+                var functionModalAmmenities2 = function () {
+                    modalAmenities2.style.display = "block";
+                }
+                var functionModalAmmenities3 = function () {
+                    modalAmenities3.style.display = "block";
+                }
+                var functionModalAmmenities4 = function () {
+                    modalAmenities4.style.display = "block";
+                }
+                var functionModalAmmenities5 = function () {
+                    modalAmenities5.style.display = "block";
+                }
+                var functionModalAmmenities6 = function () {
                         modalAmenities6.style.display = "block";
-                    }  
+                    }
                     // When the user clicks the button, open the modal
-                    btnMenu.onclick = functionModalBreakfast;
-                    btnMenu2.onclick = functionMorningCoffee;
-                    btnMenu3.onclick = functionLunch;
-                    btnMenu4.onclick = functionAfternoonCoffee;
-                    btnMenu5.onclick = functionDinner;
-                    btnMenu6.onclick = functionModalMenu;
-
-                    btnAvAids.onclick = functionModalAvAids;
-                    btnAvAids2.onclick = functionModalAvAids2;
-                    btnAvAids3.onclick = functionModalAvAids3;
-                    btnAvAids4.onclick = functionModalAvAids4;
-                    btnAvAids5.onclick = functionModalAvAids5;
-                    btnAvAids6.onclick = functionModalAvAids6;
-
-                    btnAmenities.onclick = functionModalAmmenities;
-                    btnAmenities2.onclick = functionModalAmmenities2;
-                    btnAmenities3.onclick = functionModalAmmenities3;
-                    btnAmenities4.onclick = functionModalAmmenities4;
-                    btnAmenities5.onclick = functionModalAmmenities5;
-                    btnAmenities6.onclick = functionModalAmmenities6;  
-
-                    // When the user clicks on <span> (x), close the modal
-                    span.onclick = function () {
+                btnMenu.onclick = functionModalBreakfast;
+                btnMenu2.onclick = functionMorningCoffee;
+                btnMenu3.onclick = functionLunch;
+                btnMenu4.onclick = functionAfternoonCoffee;
+                btnMenu5.onclick = functionDinner;
+                btnMenu6.onclick = functionModalMenu;
+                btnAvAids.onclick = functionModalAvAids;
+                btnAvAids2.onclick = functionModalAvAids2;
+                btnAvAids3.onclick = functionModalAvAids3;
+                btnAvAids4.onclick = functionModalAvAids4;
+                btnAvAids5.onclick = functionModalAvAids5;
+                btnAvAids6.onclick = functionModalAvAids6;
+                btnAmenities.onclick = functionModalAmmenities;
+                btnAmenities2.onclick = functionModalAmmenities2;
+                btnAmenities3.onclick = functionModalAmmenities3;
+                btnAmenities4.onclick = functionModalAmmenities4;
+                btnAmenities5.onclick = functionModalAmmenities5;
+                btnAmenities6.onclick = functionModalAmmenities6;
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
                         modalMenu.style.display = "none";
                         divMenu.style.display = "block";
                         divCategoryOptions.style.display = "none";
-
-                        modalBreakfast.style.display = "none"; 
-                        modalMorningCoffee.style.display = "none"; 
-                        modalLunch.style.display = "none"; 
-                        modalAfternoonCoffee.style.display = "none"; 
-                        modalDinner.style.display = "none"; 
-
-                        modalAvAids.style.display = "none"; 
+                        modalBreakfast.style.display = "none";
+                        modalMorningCoffee.style.display = "none";
+                        modalLunch.style.display = "none";
+                        modalAfternoonCoffee.style.display = "none";
+                        modalDinner.style.display = "none";
+                        modalAvAids.style.display = "none";
                         modalAvAids2.style.display = "none";
                         modalAvAids3.style.display = "none";
                         modalAvAids4.style.display = "none";
                         modalAvAids5.style.display = "none";
                         modalAvAids6.style.display = "none";
-
-                        modalAmenities.style.display = "none"; 
-                        modalAmenities2.style.display = "none"; 
-                        modalAmenities3.style.display = "none"; 
-                        modalAmenities4.style.display = "none"; 
-                        modalAmenities5.style.display = "none"; 
-                        modalAmenities6.style.display = "none"; 
-
+                        modalAmenities.style.display = "none";
+                        modalAmenities2.style.display = "none";
+                        modalAmenities3.style.display = "none";
+                        modalAmenities4.style.display = "none";
+                        modalAmenities5.style.display = "none";
+                        modalAmenities6.style.display = "none";
                     }
-
                     // When the user clicks anywhere outside of the modal, close it
-                    window.onclick = function (event) {   
-                        if (event.target == modalAmenities) {
-                            modalAmenities.style.display = "none";
-                        }    
-
-                        if (event.target == modalAmenities2) {
-                            modalAmenities2.style.display = "none";
-                        }   
-
-                        if (event.target == modalAmenities3) {
-                            modalAmenities3.style.display = "none";
-                        }   
-
-                        if (event.target == modalAmenities4) {
-                            modalAmenities4.style.display = "none";
-                        }    
-
-                        if (event.target == modalAmenities5) {
-                            modalAmenities5.style.display = "none";
-                        }  
-
-                        if (event.target == modalAmenities6) {
-                            modalAmenities6.style.display = "none";
-                        }  
-
-                        if (event.target == modalAvAids) {
-                            modalAvAids.style.display = "none";
-                        }   
-
-                        if (event.target == modalAvAids2) {
-                            modalAvAids2.style.display = "none";
-                        }  
-
-                        if (event.target == modalAvAids3) {
-                            modalAvAids3.style.display = "none";
-                        }   
-
-                        if (event.target == modalAvAids4) {
-                            modalAvAids4.style.display = "none";
-                        }  
-
-                        if (event.target == modalAvAids5) {
-                            modalAvAids5.style.display = "none";
-                        }   
-
-                        if (event.target == modalAvAids6) {
-                            modalAvAids6.style.display = "none";
-                        }  
-
-                        if (event.target == modalDinner) {
-                            modalDinner.style.display = "none";
-                        }     
-
-                        if (event.target == modalAfternoonCoffee) {
-                            modalAfternoonCoffee.style.display = "none";
-                        }    
-
-                        if (event.target == modalMorningCoffee) {
-                            modalMorningCoffee.style.display = "none";
-                        }   
-
-                        if (event.target == modalLunch) {
-                            modalLunch.style.display = "none";
-
-                        } 
-
-                        if (event.target == modalBreakfast) {
-                            modalBreakfast.style.display = "none";
-
-                        } 
-
-                        if (event.target == modalMenu) {
-                            modalMenu.style.display = "none";
-                            divMenu.style.display = "block";
-                            divCategoryOptions.style.display = "none";
-                        }
+                window.onclick = function (event) {
+                    if (event.target == modalAmenities) {
+                        modalAmenities.style.display = "none";
                     }
-
-                    var apackage1 = document.getElementById("apackage1");
-                    var divMenu = document.getElementById("menu");
-                    var divCategoryOptions = document.getElementById("categoryOptions");
-
-                    apackage1.onclick = function () {
-                        divMenu.style.display = "none";
-                        divCategoryOptions.style.display = "block";
+                    if (event.target == modalAmenities2) {
+                        modalAmenities2.style.display = "none";
                     }
-                </script>
+                    if (event.target == modalAmenities3) {
+                        modalAmenities3.style.display = "none";
+                    }
+                    if (event.target == modalAmenities4) {
+                        modalAmenities4.style.display = "none";
+                    }
+                    if (event.target == modalAmenities5) {
+                        modalAmenities5.style.display = "none";
+                    }
+                    if (event.target == modalAmenities6) {
+                        modalAmenities6.style.display = "none";
+                    }
+                    if (event.target == modalAvAids) {
+                        modalAvAids.style.display = "none";
+                    }
+                    if (event.target == modalAvAids2) {
+                        modalAvAids2.style.display = "none";
+                    }
+                    if (event.target == modalAvAids3) {
+                        modalAvAids3.style.display = "none";
+                    }
+                    if (event.target == modalAvAids4) {
+                        modalAvAids4.style.display = "none";
+                    }
+                    if (event.target == modalAvAids5) {
+                        modalAvAids5.style.display = "none";
+                    }
+                    if (event.target == modalAvAids6) {
+                        modalAvAids6.style.display = "none";
+                    }
+                    if (event.target == modalDinner) {
+                        modalDinner.style.display = "none";
+                    }
+                    if (event.target == modalAfternoonCoffee) {
+                        modalAfternoonCoffee.style.display = "none";
+                    }
+                    if (event.target == modalMorningCoffee) {
+                        modalMorningCoffee.style.display = "none";
+                    }
+                    if (event.target == modalLunch) {
+                        modalLunch.style.display = "none";
+                    }
+                    if (event.target == modalBreakfast) {
+                        modalBreakfast.style.display = "none";
+                    }
+                    if (event.target == modalMenu) {
+                        modalMenu.style.display = "none";
+                        divMenu.style.display = "block";
+                        divCategoryOptions.style.display = "none";
+                    }
+                }
+                var apackage1 = document.getElementById("apackage1");
+                var divMenu = document.getElementById("menu");
+                var divCategoryOptions = document.getElementById("categoryOptions");
+                apackage1.onclick = function () {
+                    divMenu.style.display = "none";
+                    divCategoryOptions.style.display = "block";
+                }
+            </script>
 
-                <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-                <!-- Include all compiled plugins (below), or include individual files as needed -->
-                <script src="js/bootstrap.min.js"></script>
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="js/bootstrap.min.js"></script>
 
 
-                <script>
-                    $(document).ready(function () {
-
-                        //$(location).attr('href', 'www.google.co.in');
-                        var days = $("#days").val();
-                        if (days == 0) {
-                            $("#form").attr('action', 'SleepingRooms.php');
-                        } else {
-                            $("#form").attr('action', 'EventInformation.php');
-                        }
-
-
-                    });
-                </script>
+            <script>
+                $(document).ready(function () {
+                    //$(location).attr('href', 'www.google.co.in');
+                    var days = $("#days").val();
+                    if (days == 0) {
+                        $("#form").attr('action', 'SleepingRooms.php');
+                    } else {
+                        $("#form").attr('action', 'EventInformation.php');
+                    }
+                });
+            </script>
 
     </body>
 
