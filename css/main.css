@@ -212,6 +212,10 @@
 	color:#4E4B48;
     width:100%;
 }
+ 
+#SearchRequest{ 
+	margin-bottom: 1%;
+}
 
 h2{ 
 	font-size: 12px; 
@@ -468,6 +472,24 @@ input[type='checkbox']:checked {
 	font-size: 100%; 
 	text-align: left;
 }
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 95%; 
+    margin-left: 2%; 
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+} 
+
 footer{
 	background-color: #373734; 
 	text-align: center; 
