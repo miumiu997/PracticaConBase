@@ -1,4 +1,3 @@
-
 /*nav bar*/ 
 .SignIn{
 	background-color: #F3D54E; 
@@ -75,6 +74,13 @@
 	margin-bottom: 5%
 } 
 
+/*Summary*/ 
+.SummaryTitle{ 
+	font-family: arial; 
+	color: #78BE20;  
+	font-size: 100%;
+}
+
 /*Next Button*/
 
 .button{
@@ -100,7 +106,7 @@
 	margin-top: -2%;
 }
 
-#Ffooter{
+#footer{
 	background-color: #373734; 
 	text-align: center; 
 	color: white; 
@@ -528,7 +534,7 @@ form{
 
 label{ 
 	color: #4E4B48;
-
+}
 
 nav ul {
 	background: #5D5E5B; 
@@ -586,5 +592,3 @@ nav ul ul li a:hover {
 nav ul ul ul {
 	position: absolute; left: 100%; top:0;
 }
-
-

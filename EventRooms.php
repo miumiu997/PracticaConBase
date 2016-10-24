@@ -9,39 +9,48 @@
 
     <?php
     
-    $_SESSION['first-name'] = $_POST['first-name'];
-    $_SESSION['last-name'] = $_POST['last-name'];
-    $_SESSION['email'] = $_POST['email'];
-    $_SESSION['telephone'] = $_POST['telephone'];
-    $_SESSION['start-date'] = $_POST['start-date'];
-    $_SESSION['end-date'] = $_POST['end-date'];
-    $_SESSION['company'] = $_POST['company'];
-    $_SESSION['typeOfEvent'] = $_POST['typeOfEvent'];
-    $_SESSION['reason'] = $_POST['reason'];
-    $_SESSION['publish'] = $_POST['publish'];
-    //$_SESSION['logo'] = $_POST['logo'];
-    
-    $imgData =addslashes(file_get_contents($_FILES['logo']['tmp_name']));
-    
-    $_SESSION['imgData'] = $imgData;
-    
-    
-    
-    $_SESSION['event-name'] = $_POST['event-name'];
-    
-    $date1 = new DateTime($_POST['start-date']);
-    $date2 = new DateTime($_POST['end-date']);
+        $_SESSION['first-name'] = $_POST['first-name'];
+        $_SESSION['last-name'] = $_POST['last-name'];
+        $_SESSION['email'] = $_POST['email'];
+        $_SESSION['telephone'] = $_POST['telephone'];
+        $_SESSION['start-date'] = $_POST['start-date'];
+        $_SESSION['end-date'] = $_POST['end-date'];
+        $_SESSION['company'] = $_POST['company'];
+        $_SESSION['typeOfEvent'] = $_POST['typeOfEvent'];
+        $_SESSION['reason'] = $_POST['reason'];
+        $_SESSION['publish'] = $_POST['publish'];
+        //$_SESSION['logo'] = $_POST['logo'];
 
-    $diff = date_diff($date1, $date2);
-
-    $_SESSION['days'] = $diff->d; 
-    $_SESSION['remainigDays'] = $diff->d;
+        if ($_FILES['logo']['error'][0] > 0) {
+            //echo "Sí";
+            $imgData = file_get_contents($_FILES['logo']['tmp_name']);
+            $imgName = $_FILES["logo"]["name"];
+        } else {
+            //echo "No";
+            $imgData = "";
+            $imgName = "";
+        }
     
-    //move_uploaded_file($_FILES["logo"]["tmp_name"], $_FILES["logo"]["name"]);
-    
-    //echo '<img src="'.$_FILES["logo"]["name"].'"/>';
+        
+        $_SESSION['imgData'] = $imgData;
+        $_SESSION['imgName'] = $imgName;
 
-?>
+        $_SESSION['event-name'] = $_POST['event-name'];
+
+        $date1 = new DateTime($_POST['start-date']);
+        $date2 = new DateTime($_POST['end-date']);
+
+        $diff = date_diff($date1, $date2);
+
+        $_SESSION['days'] = $diff->d + 1; 
+        $_SESSION['remainigDays'] = $diff->d;
+
+        
+        //move_uploaded_file($_FILES["logo"]["tmp_name"], $_FILES["logo"]["name"]);
+
+        //echo '<img src="'.$_FILES["logo"]["name"].'"/>';
+
+    ?>
 
         <head>
             <meta charset="utf-8">
@@ -99,9 +108,10 @@
 
                         <!-- Esto se repite por la cantidad de salones -->
 
-                        <form method="get" action="EventInformation.php">
+                        <form method="post" action="EventInformation.php">
 
                             <input type="hidden" id="days" name="days" value="<?php echo $diff->d + 1; ?>" />
+                            <input type="hidden" id="days2" name="days2" value="0" />
 
                             <?php
                         
@@ -110,7 +120,7 @@
                         // SELECT `roomsetup`.`name`, `roomsetup`.`image` FROM `roomsetup`, `eventroom`, `setupxroom` WHERE `setupxroom`.`EventSetupID` = `eventroom`.`ID` AND `setupxroom`.`RoomSetupID` = `roomsetup`.`ID` AND `eventroom`.`ID` = 1  
                         
                         $sql = "SELECT `ID`, `Name`, `Description`, `Surface`, `Height`, `Image`, `Price` FROM `eventroom`";
-                        $result = mysqli_query($conn, $sql) or die(mysql_error());
+                        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
                         while ($row = mysqli_fetch_assoc($result)) {
                             
@@ -129,7 +139,7 @@
                             echo '  </div>';
                             
                             $sql2 = "SELECT `roomsetup`.`name`, `roomsetup`.`image` FROM `roomsetup`, `eventroom`, `setupxroom` WHERE `setupxroom`.`EventSetupID` = `eventroom`.`ID` AND `setupxroom`.`RoomSetupID` = `roomsetup`.`ID` AND `eventroom`.`ID` = ". $row['ID'];
-                            $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+                            $result2 = mysqli_query($conn, $sql2) or die(mysqli_error($conn));
                             
                             
                             $names = "";
@@ -160,8 +170,6 @@
                         
                         }
                     ?>
-
-
                                 <!-- Esto se repite por la cantidad de salones -->
 
                                 <div class="form-group row">
@@ -271,8 +279,8 @@
             <script>
                 $(document).ready(function () {
 
-                    $.cookie("days", <?php echo $diff->d ?>);
-                    $.cookie("remainDays", <?php echo $diff->d ?>);
+                    //$.cookie("days", <?php //echo $diff->d ?>);
+                    //$.cookie("remainDays", <?php //echo $diff->d ?>);
 
                     //alert($.cookie("days"));
 

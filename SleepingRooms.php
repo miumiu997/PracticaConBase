@@ -2,12 +2,51 @@
 <html lang="en">
 
 <?php
+    error_reporting(0);
     include_once("connection.php");
 ?>
 
     <?php
     // Start the session
     session_start();
+    
+    $array = array(
+                
+                "RoomSetup" => $_POST['RoomSetup'],
+                "NoGuests" => $_POST['NoGuests'],
+                "startTime" => $_POST['startTime'],
+                
+                "radiobreakfast" => $_POST['radiobreakfast'],
+                "otherBreakfast" => $_POST['otherbreakfast'],
+                
+                "radiocoffee" => $_POST['radiocoffee'],
+                "othercoffee" => $_POST['othercoffee'],
+                
+                "radiolunch" => $_POST['radiolunch'],
+                "otherlunch" => $_POST['otherlunch'],
+                
+                "radioafternooncoffee" => $_POST['radioafternooncoffee'],
+                "otherafternooncoffee" => $_POST['otherafternooncoffee'],
+                
+                "radiodinner" => $_POST['radiodinner'],
+                "otherdinner" => $_POST['otherdinner'],
+                
+                "avAid1" => $_POST['avAid1'],
+                "avAid2" => $_POST['avAid2'],
+                "avAid3" => $_POST['avAid3'],
+                "avAid4" => $_POST['avAid4'],
+                "avAid5" => $_POST['avAid5'],
+                "avAid6" => $_POST['avAid6'],
+                
+                "otheravaids" => $_POST['otheravaids'],
+        
+                "amenities" => $_POST['amenities'],
+                "othermenu" => $_POST['othermenu']
+                
+            );
+            
+    $_SESSION['day'. $_POST['days2']] = $array;
+    //echo "<h1>" . $_POST['days2'] . "</h1>";
 ?>
 
 
@@ -71,7 +110,7 @@
                     </div>
 
                     <div class="row">
-                        <form method="get" action="Comments.php">
+                        <form method="post" action="Comments.php">
                             <div class="row" id="sleepingRooms">
                                 <div class="form-group row Beds">
                                     <div class="col-md-4">
@@ -102,15 +141,15 @@
                                         echo "<div class='form-group row inputRooms'>
                                                 <label for='single' class='col-md-1 col-form-label'>Single: </label>
                                                 <div class='col-md-3'>
-                                                    <input class='form-control' type='number' value='' name='single[]'>
+                                                    <input class='form-control' type='number' value='' id='single' name='single[]'>
                                                 </div>
                                                 <label for='double' class='col-md-1 col-form-label'>Double: </label>
                                                 <div class='col-md-3'>
-                                                    <input class='form-control' type='number' value='' name='double[]'>
+                                                    <input class='form-control' type='number' value='' id='double' name='double[]'>
                                                 </div>
                                                 <label for='suite' class='col-md-1 col-form-label'>Suite: </label>
                                                 <div class='col-md-3'>
-                                                    <input class='form-control' type='number' value='' name='suite[]'>
+                                                    <input class='form-control' type='number' value='' id='suite' name='suite[]'>
                                                 </div>
                                             </div>";
 

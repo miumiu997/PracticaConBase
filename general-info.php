@@ -109,13 +109,13 @@
                                 <div class="col-md-3">
                                     <select id="typeOfEvent" name="typeOfEvent">
                                         <?php
-                                        $sql = "SELECT `ID`, `TypeName` FROM `typeofevent`";
-                                        $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                            $sql = "SELECT `ID`, `TypeName` FROM `typeofevent`";
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
 
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                            echo('<option value="'.$row['ID'].'">'.$row['TypeName'].'</option>');
-                                        }
-                                    ?>
+                                            while ($row = mysqli_fetch_assoc($result)) {
+                                                echo('<option value="'.$row['ID'].'">'.$row['TypeName'].'</option>');
+                                            }
+                                        ?>
                                     </select>
                                 </div>
                             </div>
@@ -152,17 +152,16 @@
                                     </div>
 
                                 </div>
-                            </div> 
-
-                                <div class="form-group row">
-                                    <label for="submit" class="col-md-2 col-form-label"> </label>
-                                    <div class="col-md-3">
-                                    </div>
-                                    <label for="submit" class="col-md-2 col-form-label"></label>
-                                    <div class="col-md-3">
-                                        <input id="submit" name="submit" type="submit" class="button btnNext" value="Next">
-                                    </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="submit" class="col-md-2 col-form-label"> </label>
+                                <div class="col-md-3">
                                 </div>
+                                <label for="submit" class="col-md-2 col-form-label"></label>
+                                <div class="col-md-3">
+                                    <input id="submit" name="submit" type="submit" class="button btnNext" value="Next">
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

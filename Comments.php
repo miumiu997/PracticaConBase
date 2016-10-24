@@ -3,9 +3,9 @@
 
     <?php 
         session_start();
-        $_SESSION['singles'] = $_GET['single'];
-        $_SESSION['doubles'] = $_GET['double'];
-        $_SESSION['suites'] = $_GET['suite'];
+        $_SESSION['singles'] = $_POST['single'];
+        $_SESSION['doubles'] = $_POST['double'];
+        $_SESSION['suites'] = $_POST['suite'];
     ?>
     
 <head>

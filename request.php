@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <!--
+<!--
     <?php
         // Start the session
         session_start();
         $_SESSION['comments'] = $_GET['mytext'];
     ?> 
     -->
-    
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -60,58 +60,45 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
-        <div class="row" id = "SearchRequest"> 
-            <div class="col-lg-2 col-lg-offset-8"> 
-                <input class="form-control" type="text" value="Request ID or Name" name="search_request_input" id="search_request_input"> 
-            </div> 
-            <div class="col-lg-2"> 
-                <button type="button" class="btn btn-default BlueButton">Search Request</button>
+        <div class="row" id="SearchRequest">
+            <div class="col-lg-2 col-lg-offset-8">
+                <input class="form-control" type="text" placeholder="Request ID or Name" name="search_request_input" id="search_request_input">
             </div>
-        </div> 
+            <div class="col-lg-2">
+                <button type="button" id="search" name="search" class="btn btn-default BlueButton">Search Request</button>
+            </div>
+        </div>
         <div>
-            <table>
-              <tr> 
-                <th> </th>
-                <th>Client Name</th>
-                <th>Request ID</th> 
-                <th>Requested Date</th>
-              </tr>
-              <tr> 
-                <td> o </td>
-                <td>Kam Yok Wong</td>
-                <td>38218803292</td>
-                <td>12/3/2016</td>
-              </tr>
-              <tr> 
-                <td> o </td>
-                <td>Lin Su Mei Conejo</td>
-                <td>32892393</td>
-                <td>12/3/2016</td>
-              </tr>
-              <tr> 
-                <td> o </td>
-                <td>Marialena Conejo</td>
-                <td>9389230</td>
-                <td>12/3/2016</td>
-              </tr>
-              <tr> 
-                <td>  </td>
-                <td>William Yong</td>
-                <td>79237932</td>
-                <td>12/3/2016</td>
-              </tr>
-              <tr> 
-                <td> o </td>
-                <td>Julio Hernandez</td>
-                <td>1839282</td>
-                <td>12/3/2016</td>
-              </tr>
-              <tr> 
-                <td> o </td>
-                <td>Ancio Ching</td>
-                <td>23938918</td>
-                <td>12/3/2016</td>
-              </tr>
+            <table id="table">
+                <tr>
+                    <th> </th>
+                    <th>Client Name</th>
+                    <th>Request ID</th>
+                    <th>Requested Date</th>
+                </tr>
+                <?php
+                    include_once("connection.php");
+                    //$search = $_GET['search'];
+                    //$search = $_GET['search'];
+
+                    $sql = "SELECT `RequestNumber`, `Name`, `LastName`, `Date`, `Seen` FROM `request`";
+                    $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        // echo de los resultados   
+                        echo '<tr>';
+                        echo '  <td>';
+
+                        if($row['Seen'] == 0){
+                            echo 'o';   
+                        }
+                        echo '  </td>';
+                        echo '  <td>'. $row['Name'] . ' '. $row['LastName']. '</td>';
+                        echo '  <td>' . $row['RequestNumber'] .'</td>';
+                        echo '  <td>'. $row['Date'] .'</td>';
+                        echo '</tr>';
+                    }
+                ?>
             </table>
         </div>
     </div>
@@ -119,19 +106,24 @@
     <footer>
         <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
         <H1 id="footerID">©1996 - 2016 Marriott International, Inc. All rights reserved. Marriott proprietary information.</H1>
-
     </footer>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            $("#yes").click(function () {
-                $("#tableClothPackages").show();
+            $("#search").click(function () {
+                //alert($('#search_request_input').val());
+                $.ajax({
+                    method: 'GET',
+                    url: 'ajaxSearch.php?search=' + $('#search_request_input').val(),
+                    data: {},
+                    success: function (data) {
+                        //alert(data);
+                        $('#table').empty();
+                        $('#table').append(data);
+                    }
+                });
             });
-            $("#no").click(function () {
-                $("#tableClothPackages").hide();
-            });
-
         });
     </script>
 

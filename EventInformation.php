@@ -1,8 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<?php 
+    <?php 
+    
+        error_reporting(0);
         include_once("connection.php");
+    
+        session_start();
+
+        $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+        $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+        $selectSetup = "";//'<option value="0"></option>';
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $selectSetup = $selectSetup. '<option value="'.$row['ID'].'">'.$row['Name'].'</option>';
+        }
+    
+        
+        $avAidsOptions = '<div class="form-group row EventRooms">';
+        $sql = "SELECT `ID`, `Name` FROM `avaids`";
+        $i = 0;
+        $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+        while ($row = mysqli_fetch_assoc($result)) {
+
+            $avAidsOptions = $avAidsOptions. '<div class="col-md-4 AvAidOptions">';
+            $avAidsOptions = $avAidsOptions. '  <p>'. $row['Name'] .'</p>';
+            $avAidsOptions = $avAidsOptions. '</div>';
+            $avAidsOptions = $avAidsOptions. '<div class="col-md-1">';
+            $avAidsOptions = $avAidsOptions. '  <input type="checkbox" name="avAid&[]" value="'. $row['ID'] .'"></input>';
+            $avAidsOptions = $avAidsOptions. '</div>';
+
+            $i = $i + 1;
+            if ($i % 2 == 0){
+                $avAidsOptions = $avAidsOptions. "</div>";
+                $avAidsOptions = $avAidsOptions. '<div class="form-group row EventRooms">';
+            }
+
+        }
+
+        $avAidsOptions = $avAidsOptions. "</div>";
+    
+        if ($_SERVER['HTTP_REFERER'] == "http://localhost/PracticaConBase/EventInformation.php"){
+            // Save inputs to $_SESISON
+            
+            $array = array(
+                
+                "RoomSetup" => $_POST['RoomSetup'],
+                "NoGuests" => $_POST['NoGuests'],
+                "startTime" => $_POST['startTime'],
+                
+                "radiobreakfast" => $_POST['radiobreakfast'],
+                "otherBreakfast" => $_POST['otherbreakfast'],
+                
+                "radiocoffee" => $_POST['radiocoffee'],
+                "othercoffee" => $_POST['othercoffee'],
+                
+                "radiolunch" => $_POST['radiolunch'],
+                "otherlunch" => $_POST['otherlunch'],
+                
+                "radioafternooncoffee" => $_POST['radioafternooncoffee'],
+                "otherafternooncoffee" => $_POST['otherafternooncoffee'],
+                
+                "radiodinner" => $_POST['radiodinner'],
+                "otherdinner" => $_POST['otherdinner'],
+                
+                "avAid1" => $_POST['avAid1'],
+                "avAid2" => $_POST['avAid2'],
+                "avAid3" => $_POST['avAid3'],
+                "avAid4" => $_POST['avAid4'],
+                "avAid5" => $_POST['avAid5'],
+                "avAid6" => $_POST['avAid6'],
+                
+                "otheravaids" => $_POST['otheravaids'],
+                "amenities" => $_POST['amenities'],
+                
+                "othermenu" => $_POST['othermenu']
+                
+            );
+            
+            $_SESSION['day'. $_POST['days2']] = $array;
+            
+            //echo "<h1>" . $_POST['days2'] . "</h1>";
+            //echo "<h1>" . $_SESSION['days'] . "</h1>";
+            
+            //var_dump($_SESSION['day'.$_POST['days2']]);
+        }
+    
     ?>
 
     <head>
@@ -29,7 +114,6 @@
         <div class="row">
 
             <nav class="navbar navbar-default">
-                <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
@@ -40,7 +124,6 @@
                     <a href="home.html"><img class="marriottLogoNav" height="40px" width="60px" src="logos/Marriot%20Logo%20NavBar.png" /></a>
                 </div>
 
-                <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li>
@@ -53,23 +136,22 @@
                         <li class="SignIn"><a href="SignIn.html">Sign In</a></li>
                     </ul>
                 </div>
-                <!-- /.navbar-collapse -->
             </nav>
 
             <!--
-        Ammenities
-        AvAids
-        Menú
-        -->
+                Ammenities
+                AvAids
+                Menú
+            -->
+            <form method="post" id="form" name="form">
+                <div>
+                    <div class="row questionDiv">
+                        <h1 class="question">What are you planning for day <?php echo $_POST['days2'] + 1; ?>?</h1>
+                    </div>
+                    <div class="row">
 
-            <div>
-                <div class="row questionDiv">
-                    <h1 class="question">What are you planning for your first day?</h1>
-                </div>
-                <div class="row">
-                    <form method="get" id="form" name="form">
-
-                        <input type="hidden" id="days" name="days" value="<?php echo $_GET['days'] - 1; ?>" />
+                        <input type="hidden" id="days" name="days" value="<?php echo $_POST['days'] - 1; ?>" />
+                        <input type="hidden" id="days2" name="days2" value="<?php echo $_POST['days2'] + 1; ?>" />
 
                         <div id="Breakfast" class="col-md-2">
                             <div id="eventInformation">
@@ -85,13 +167,20 @@
                                 <div class="form-group row EventInfo">
                                     <label for="single" class="col-md-4 col-form-label">Setup: </label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" value="" name="RoomSetup" id="RoomSetup">
+
+                                        <select class="form-control" name="RoomSetup[]" id="RoomSetup">
+                                            <?php
+                                                echo $selectSetup;                                            
+                                            ?>
+                                        </select>
+
+
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <label for="single" class="col-md-4 col-form-label">Time: </label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="time" value="" name="startTime" id="startTime">
+                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
                                     </div>
                                 </div>
 
@@ -128,7 +217,11 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="RoomSetup[]" id="RoomSetup">
+                                        <select class="form-control" name="RoomSetup[]" id="RoomSetup">
+                                            <?php
+                                                echo $selectSetup;                                            
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
@@ -170,12 +263,16 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="RoomSetup[]" id="RoomSetup">
+                                        <select class="form-control" name="RoomSetup[]" id="RoomSetup">
+                                            <?php
+                                                echo $selectSetup;                                            
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" value="12:00:pm" name="startTime[]" id="startTime">
                                     </div>
                                 </div>
 
@@ -212,7 +309,11 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="RoomSetup[]" id="RoomSetup">
+                                        <select class="form-control" name="RoomSetup[]" id="RoomSetup">
+                                            <?php
+                                                    echo $selectSetup;                                            
+                                                ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
@@ -254,7 +355,11 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="RoomSetup[]" id="RoomSetup">
+                                        <select class="form-control" name="RoomSetup[]" id="RoomSetup">
+                                            <?php
+                                                echo $selectSetup;                                            
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
@@ -296,7 +401,11 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="RoomSetup[]" id="RoomSetup">
+                                        <select class="form-control" name="RoomSetup[]" id="RoomSetup">
+                                            <?php
+                                                echo $selectSetup;                                            
+                                            ?>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
@@ -335,759 +444,399 @@
                                 <input type="submit" class="button" value="Next Day">
                             </div>
                         </div>
+                    </div>
+                </div>
 
-                    </form>
+                
+                <div id="MenuModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Other Menu</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <textarea name="othermenu" id="othermenu" rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="BreakfastModal" class="modal">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">◊</span>
+                            <h2>Breakfast Options</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row" id="categoryOptions">
+
+
+                                <div class="row" id="tableClothPackages">
+
+                                    <?php
+
+                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 1"; // breakfast id = 1
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
+                                                echo '</div>';
+
+                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+
+                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                                $i = 0;
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                    echo '  <div class="col-md-4">';
+                                                    echo '      <p>- '. $row2['Name'] .'</p>';
+                                                    echo '  </div>';
+
+                                                    $i = $i + 1;
+
+                                                    if ($i % 3 == 0) {
+                                                        echo "</div>";
+                                                        echo '<div class="form-group row EventRooms">';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                            }
+
+                                        ?>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-4 col-form-label PackageLabel">Other</label>
+                                            <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="0"></input>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea name="otherbreakfast" id="otherbreakfast" rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                            </div>
+
+                                        </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="MorningCoffeeModal" class="modal">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">◊</span>
+                            <h2>Morning Coffee Break Options</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row" id="categoryOptions">
+
+
+                                <div class="row" id="tableClothPackages">
+                                    <?php
+
+                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 2"; // Coffee id = 3
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <input class="col-md-2" id="radiocoffee" type="radio" name="radiocoffee" value="'. $row['ID'] .'"></input>';
+                                                echo '</div>';
+
+                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+
+                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                                $i = 0;
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                    echo '  <div class="col-md-4">';
+                                                    echo '      <p>- '. $row2['Name'] .'</p>';
+                                                    echo '  </div>';
+
+                                                    $i = $i + 1;
+
+                                                    if ($i % 3 == 0) {
+                                                        echo "</div>";
+                                                        echo '<div class="form-group row EventRooms">';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                            }
+
+                                        ?>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-4 col-form-label PackageLabel">Other</label>
+                                            <input class="col-md-2" id="radiocoffee" type="radio" name="radiocoffee" value="0"></input>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea rows="5" name="othercoffee" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                            </div>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="LunchModal" class="modal">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">◊</span>
+                            <h2>Lunch Options</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row" id="categoryOptions">
+
+
+                                <div class="row" id="tableClothPackages">
+                                    <?php
+
+                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 3"; // Lunch id = 3
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <input class="col-md-2" id="radiolunch" type="radio" name="radiolunch" value="'. $row['ID'] .'"></input>';
+                                                echo '</div>';
+
+                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+
+                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                                $i = 0;
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                    echo '  <div class="col-md-4">';
+                                                    echo '      <p>- '. $row2['Name'] .'</p>';
+                                                    echo '  </div>';
+
+                                                    $i = $i + 1;
+
+                                                    if ($i % 3 == 0) {
+                                                        echo "</div>";
+                                                        echo '<div class="form-group row EventRooms">';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                            }
+
+                                        ?>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-4 col-form-label PackageLabel">Other</label>
+                                            <input class="col-md-2" id="radiolunch" type="radio" name="radiolunch" value="0"></input>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea name="otherlunch" id=otherlunch rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                            </div>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="AfternoonCoffeeModal" class="modal">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">◊</span>
+                            <h2>Afternoon Coffee Options</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row" id="categoryOptions">
+                                <!-- This is repeated by the amount of category options there are -->
+
+
+                                <div class="row" id="tableClothPackages">
+                                    <?php
+
+                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 6"; // afternoon coffee id = 6
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <input class="col-md-2" id="radioafternooncoffee" type="radio" name="radioafternooncoffee" value="'. $row['ID'] .'"></input>';
+                                                echo '</div>';
+
+                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+
+                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                                $i = 0;
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                    echo '  <div class="col-md-4">';
+                                                    echo '      <p>- '. $row2['Name'] .'</p>';
+                                                    echo '  </div>';
+
+                                                    $i = $i + 1;
+
+                                                    if ($i % 3 == 0) {
+                                                        echo "</div>";
+                                                        echo '<div class="form-group row EventRooms">';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                            }
+
+                                        ?>
+
+
+                                        <!-- This is repeated by the amount of amenities there are  -->
+
+                                        <div class="form-group row">
+                                            <label class="col-md-4 col-form-label PackageLabel">Other</label>
+                                            <input class="col-md-2" id="radioafternooncoffee" type="radio" name="radioafternooncoffee" value="0"></input>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea rows="5" name="otherafternooncoffee" id="otherafternooncoffee"cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                            </div>
+
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="DinnerModal" class="modal">
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">◊</span>
+                            <h2>Dinner Options</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row" id="categoryOptions">
+                                <!-- This is repeated by the amount of category options there are -->
+
+                                <div class="row" id="tableClothPackages">
+                                    <?php
+
+                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 5"; // breakfast id = 1
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                            while ($row = mysqli_fetch_assoc($result)) {
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <input class="col-md-2" id="radiodinner" type="radio" name="radiodinner" value="'. $row['ID'] .'"></input>';
+                                                echo '</div>';
+
+                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+
+                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                                $i = 0;
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                    echo '  <div class="col-md-4">';
+                                                    echo '      <p>- '. $row2['Name'] .'</p>';
+                                                    echo '  </div>';
+
+                                                    $i = $i + 1;
+
+                                                    if ($i % 3 == 0) {
+                                                        echo "</div>";
+                                                        echo '<div class="form-group row EventRooms">';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                            }
+
+                                        ?>
+
+
+                                        <!-- This is repeated by the amount of amenities there are  -->
+
+                                        <div class="form-group row">
+                                            <label class="col-md-4 col-form-label PackageLabel">Other</label>
+                                            <input class="col-md-2" id="radiodinner" type="radio" name="radiodinner" value="0"></input>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea rows="5" cols="50" name="otherdinner" id="otherdinner" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                            </div>
+
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
 
-            </div>
 
-            <div id="MenuModal" class="modal">
-                <div class="modal-content">
+                <div id="AvAidsModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">◊</span>
-                        <h2>Menu</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>AvAids</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row" id="menu">
-                            <form method="get" action="AvAids.html">
+                        <div class="modal-body">
+                            <div class="row">
                                 <div class="row">
                                     <div class="row questionDiv">
-                                        <h1 class="question">We are proud to offer you the following Food and Beverage options </h1>
+                                        <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
                                     </div>
                                 </div>
+                                <!-- This is repeated by the amount of category options there are -->
 
-                                <!-- This is repeated by the amount of amenities there are -->
-
-                                <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label for="single" class="col-md-4 col-form-label MenuLabel">Breakfast</label>
-                                        <label for="single" class="col-md-4 col-form-label MenuLabel">Coffee Break</label>
-                                        <label for="single" class="col-md-4 col-form-label MenuLabel">Lunch</label>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <a id="apackage1">
-                                                <img alt="package1" class="menuPhotos" src="photos/Menu/Breakfast.jpg" />
-                                            </a>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <img alt="package2" class="menuPhotos" src="photos/Menu/CoffeeBreak.jpg" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <img alt="package3" class="menuPhotos" src="photos/Menu/Lunch.jpg" />
-                                        </div>
-                                    </div>
-
-
-                                    <div class="form-group row EventRooms">
-                                        <label for="single" class="col-md-4 col-form-label MenuLabel">Dinner</label>
-                                        <label for="single" class="col-md-4 col-form-label MenuLabel">Cocktail</label>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <img alt="package1" class="menuPhotos" height="10px" width="60px" src="photos/Menu/Dinner.jpg" />
-                                        </div>
-                                        <div class="col-md-4">
-                                            <img alt="package2" class="menuPhotos" height="40px" width="60px" src="photos/Menu/Cocktail.jpg" />
-                                        </div>
-                                    </div>
-
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                </div>
-
-
-                            </form>
-                        </div>
-                        <!--- -->
-
-                        <div class="row" id="categoryOptions" hidden="hidden">
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="AvAids.html">
-                                <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Courtyard Breakfast</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Variety of fruit</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Your choice of eggs</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Variety of cheese and meats </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Bacon or Ham </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Gallo Pinto </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Plantain or Cheese </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Toast, butter or jam </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Corn Tortillas</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- 3 choices of beverages</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Working Breakfast</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>Your choice of bread</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>Fresh Fruit Parfait</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>Yogurt</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>Honey, butter or Jam</p>
-                                        </div>
-                                    </div>
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="BreakfastModal" class="modal">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">◊</span>
-                        <h2>Breakfast Options</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row" id="categoryOptions">
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="AvAids.html">
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                    
-                                        $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 1"; // breakfast id = 1
-                                        $result = mysqli_query($conn, $sql) or die(mysql_error());
-
-                                        while ($row = mysqli_fetch_assoc($result)) {
-                                        
-                                            echo '<div class="form-group row EventRooms">';
-                                            echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                            echo '  <input class="col-md-2" id=radiobreakfast type="radio" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
-                                            echo '</div>';
-                                            
-                                            $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
-                                            
-                                            $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
-                                            
-                                            $i = 0;
-                                            
-                                            echo '<div class="form-group row EventRooms">';
-                                            while ($row2 = mysqli_fetch_assoc($result2)) {
-                                                
-                                                echo '  <div class="col-md-4">';
-                                                echo '      <p>- '. $row2['Name'] .'</p>';
-                                                echo '  </div>';
-                                                
-                                                $i = $i + 1;
-
-                                                if ($i % 3 == 0) {
-                                                    echo "</div>";
-                                                    echo '<div class="form-group row EventRooms">';
-                                                }
-                                            }
-                                            echo '</div>';
-                                        }
-                                    
-                                    ?>
-
-
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" id=radiobreakfast type="radio" name="radiobreakfast" value="other"></input>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="MorningCoffeeModal" class="modal">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">◊</span>
-                        <h2>Morning Coffee Break Options</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row" id="categoryOptions">
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="AvAids.html">
-                                <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Courtyard Coffee</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Variety of fruit</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Your choice of eggs</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Variety of cheese and meats </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Bacon or Ham </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Gallo Pinto </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Plantain or Cheese </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Toast, butter or jam </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Corn Tortillas</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- 3 choices of beverages</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Working Breakfast</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>Your choice of bread</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>Fresh Fruit Parfait</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>Yogurt</p>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>Honey, butter or Jam</p>
-                                        </div>
-                                    </div>
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="LunchModal" class="modal">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">◊</span>
-                        <h2>Lunch Options</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row" id="categoryOptions">
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="AvAids.html">
-                                <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Courtyard Lunch</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Variety of fruit</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Your choice of eggs</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Variety of cheese and meats </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Bacon or Ham </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Gallo Pinto </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Plantain or Cheese </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Toast, butter or jam </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Corn Tortillas</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- 3 choices of beverages</p>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="AfternoonCoffeeModal" class="modal">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">◊</span>
-                        <h2>Afternoon Coffee Options</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row" id="categoryOptions">
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="AvAids.html">
-                                <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Courtyard Afternoon Coffee</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Variety of fruit</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Your choice of eggs</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Variety of cheese and meats </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Bacon or Ham </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Gallo Pinto </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Plantain or Cheese </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Toast, butter or jam </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Corn Tortillas</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- 3 choices of beverages</p>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-
-
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="DinnerModal" class="modal">
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">◊</span>
-                        <h2>Dinner Options</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row" id="categoryOptions">
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="AvAids.html">
-                                <div class="row" id="tableClothPackages">
-                                    <div class="form-group row EventRooms">
-                                        <label class="col-md-4 col-form-label PackageLabel">Dinner Coffee</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-
-                                    </div>
-
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Variety of fruit</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Your choice of eggs</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Variety of cheese and meats </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Bacon or Ham </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Gallo Pinto </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Plantain or Cheese </p>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row EventRooms">
-                                        <div class="col-md-4">
-                                            <p>- Toast, butter or jam </p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- Corn Tortillas</p>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <p>- 3 choices of beverages</p>
-                                        </div>
-                                    </div>
-
-
-                                    <!-- This is repeated by the amount of amenities there are  -->
-
-                                    <div class="form-group row">
-                                        <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                        <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <div id="AvAidsModal" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>AvAids</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row">
-                            <div class="row">
-                                <div class="row questionDiv">
-                                    <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
-                                </div>
-                            </div>
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="SleepingRooms.html">
-                                <div class="row" id="tableClothPackages">
-
-                                    <?php
-                                    echo '<div class="form-group row EventRooms">';
-                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                    $i = 0;
-                                    $result = mysqli_query($conn, $sql) or die('no se puedo');
-                                
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    
-                                        echo '<div class="col-md-4 AvAidOptions">';
-                                        echo '  <p>'. $row['Name'] .'</p>';
-                                        echo '</div>';
-                                        echo '<div class="col-md-1">';
-                                        echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                        echo '</div>';
-                                        
-                                        $i = $i + 1;
-                                        if ($i % 2 == 0){
-                                            echo "</div>";
-                                            echo '<div class="form-group row EventRooms">';
-                                        }
-                                    
-                                    }
-                                
-                                    echo "</div>";
-                                
-                                ?>
-
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
-                                        </div>
-
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="AvAidsModal2" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>AvAids</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row">
-                            <div class="row">
-                                <div class="row questionDiv">
-                                    <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
-                                </div>
-                            </div>
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="SleepingRooms.html">
-                                <div class="row" id="tableClothPackages">
-
-                                    <?php
-                                    echo '<div class="form-group row EventRooms">';
-                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                    $i = 0;
-                                    $result = mysqli_query($conn, $sql) or die('no se puedo');
-                                
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    
-                                        echo '<div class="col-md-4 AvAidOptions">';
-                                        echo '  <p>'. $row['Name'] .'</p>';
-                                        echo '</div>';
-                                        echo '<div class="col-md-1">';
-                                        echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                        echo '</div>';
-                                        
-                                        $i = $i + 1;
-                                        if ($i % 2 == 0){
-                                            echo "</div>";
-                                            echo '<div class="form-group row EventRooms">';
-                                        }
-                                    
-                                    }
-                                
-                                    echo "</div>";
-                                
-                                ?>
-
-                                        <div class="form-group row">
-                                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
-                                        </div>
-
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div id="AvAidsModal3" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
-
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>AvAids</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row">
-                            <div class="row">
-                                <div class="row questionDiv">
-                                    <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
-                                </div>
-                            </div>
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="SleepingRooms.html">
-                                <div class="row" id="tableClothPackages">
-
-                                    <?php
-                                        echo '<div class="form-group row EventRooms">';
-                                        $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                        $i = 0;
-                                        $result = mysqli_query($conn, $sql) or die('no se puedo');
-
-                                        while ($row = mysqli_fetch_assoc($result)) {
-
-                                            echo '<div class="col-md-4 AvAidOptions">';
-                                            echo '  <p>'. $row['Name'] .'</p>';
-                                            echo '</div>';
-                                            echo '<div class="col-md-1">';
-                                            echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                            echo '</div>';
-
-                                            $i = $i + 1;
-                                            if ($i % 2 == 0){
-                                                echo "</div>";
-                                                echo '<div class="form-group row EventRooms">';
-                                            }
-
-                                        }
-
-                                        echo "</div>";
-
+                                        $options = str_replace("&", "1", $avAidsOptions);
+                                        echo $options;
                                     ?>
 
                                     <div class="form-group row">
@@ -1096,63 +845,40 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
                                         </div>
                                     </div>
+
                                 </div>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AvAidsModal4" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AvAidsModal2" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>AvAids</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>AvAids</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- This is repeated by the amount of category options there are -->
+                                <!-- This is repeated by the amount of category options there are -->
 
-                            <form method="get" action="SleepingRooms.html">
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                    echo '<div class="form-group row EventRooms">';
-                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                    $i = 0;
-                                    $result = mysqli_query($conn, $sql) or die('no se puedo');
-                                
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    
-                                        echo '<div class="col-md-4 AvAidOptions">';
-                                        echo '  <p>'. $row['Name'] .'</p>';
-                                        echo '</div>';
-                                        echo '<div class="col-md-1">';
-                                        echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                        echo '</div>';
-                                        
-                                        $i = $i + 1;
-                                        if ($i % 2 == 0){
-                                            echo "</div>";
-                                            echo '<div class="form-group row EventRooms">';
-                                        }
-                                    
-                                    }
-                                
-                                    echo "</div>";
-                                
-                                ?>
+                                        $options = str_replace("&", "2", $avAidsOptions);
+                                        echo $options;
+                                    ?>
 
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label PackageLabel">Other</label>
@@ -1160,65 +886,38 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
+                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
                                             </div>
                                         </div>
 
                                 </div>
-
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AvAidsModal5" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AvAidsModal3" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>AvAids</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>AvAids</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- This is repeated by the amount of category options there are -->
-
-                            <form method="get" action="SleepingRooms.html">
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                    echo '<div class="form-group row EventRooms">';
-                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                    $i = 0;
-                                    $result = mysqli_query($conn, $sql) or die('no se puedo');
-                                
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    
-                                        echo '<div class="col-md-4 AvAidOptions">';
-                                        echo '  <p>'. $row['Name'] .'</p>';
-                                        echo '</div>';
-                                        echo '<div class="col-md-1">';
-                                        echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                        echo '</div>';
-                                        
-                                        $i = $i + 1;
-                                        if ($i % 2 == 0){
-                                            echo "</div>";
-                                            echo '<div class="form-group row EventRooms">';
-                                        }
-                                    
-                                    }
-                                
-                                    echo "</div>";
-                                
-                                ?>
+                                        $options = str_replace("&", "3", $avAidsOptions);
+                                        echo $options;
+                                    ?>
 
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label PackageLabel">Other</label>
@@ -1226,66 +925,40 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
+                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
                                             </div>
                                         </div>
-
                                 </div>
-
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
+                <div id="AvAidsModal4" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-            <div id="AvAidsModal6" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>AvAids</h2>
+                        </div>
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>AvAids</h2>
-                    </div>
-
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- This is repeated by the amount of category options there are -->
+                                <!-- This is repeated by the amount of category options there are -->
 
-                            <form method="get" action="SleepingRooms.html">
+
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                    echo '<div class="form-group row EventRooms">';
-                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
-                                    $i = 0;
-                                    $result = mysqli_query($conn, $sql) or die('no se puedo');
-                                
-                                    while ($row = mysqli_fetch_assoc($result)) {
-                                    
-                                        echo '<div class="col-md-4 AvAidOptions">';
-                                        echo '  <p>'. $row['Name'] .'</p>';
-                                        echo '</div>';
-                                        echo '<div class="col-md-1">';
-                                        echo '  <input type="checkbox" name="avAid" value="'. $row['ID'] .'"></input>';
-                                        echo '</div>';
-                                        
-                                        $i = $i + 1;
-                                        if ($i % 2 == 0){
-                                            echo "</div>";
-                                            echo '<div class="form-group row EventRooms">';
-                                        }
-                                    
-                                    }
-                                
-                                    echo "</div>";
-                                
-                                ?>
+                                        $options = str_replace("&", "4", $avAidsOptions);
+                                        echo $options;
+                                    ?>
 
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label PackageLabel">Other</label>
@@ -1293,185 +966,246 @@
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
+                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
+                                            </div>
+                                        </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="AvAidsModal5" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>AvAids</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row">
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                    </div>
+                                </div>
+                                <!-- This is repeated by the amount of category options there are -->
+
+                                <div class="row" id="tableClothPackages">
+
+                                    <?php
+                                        $options = str_replace("&", "5", $avAidsOptions);
+                                        echo $options;
+                                    ?>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
                                             </div>
                                         </div>
 
                                 </div>
 
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AmenitiesModal" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>Amenities</h2>
-                    </div>
+                <div id="AvAidsModal6" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>AvAids</h2>
+                        </div>
+
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h1 class="question">Additional Needs</h1>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h2 class="question">We are always prepared to fulfill your needs to assure the success of your event </h2>
+                                    </div>
+                                </div>
+                                <!-- This is repeated by the amount of category options there are -->
+
+                                <div class="row" id="tableClothPackages">
+
+                                    <?php
+                                        $options = str_replace("&", "6", $avAidsOptions);
+                                        echo $options;
+                                    ?>
+
+                                        <div class="form-group row">
+                                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
+                                            </div>
+                                        </div>
                                 </div>
                             </div>
-
-                            <!-- This is repeated by the amount of amenities there are -->
-
-                            <form method="get" action="Menus.html">
-                                <textarea rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AmenitiesModal2" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AmenitiesModal" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>Amenities</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Amenities</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h1 class="question">Additional Needs</h1>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h1 class="question">Additional Needs</h1>
+                                    </div>
                                 </div>
+
+                                <!-- This is repeated by the amount of amenities there are -->
+
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
                             </div>
-
-                            <!-- This is repeated by the amount of amenities there are -->
-
-                            <form method="get" action="Menus.html">
-                                <textarea rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AmenitiesModal3" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AmenitiesModal2" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>Amenities</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Amenities</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h1 class="question">Additional Needs</h1>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h1 class="question">Additional Needs</h1>
+                                    </div>
                                 </div>
+
+                                <!-- This is repeated by the amount of amenities there are -->
+
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+
                             </div>
-
-                            <!-- This is repeated by the amount of amenities there are -->
-
-                            <form method="get" action="Menus.html">
-                                <textarea rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AmenitiesModal4" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AmenitiesModal3" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>Amenities</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Amenities</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h1 class="question">Additional Needs</h1>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h1 class="question">Additional Needs</h1>
+                                    </div>
                                 </div>
+
+                                <!-- This is repeated by the amount of amenities there are -->
+
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
                             </div>
-
-                            <!-- This is repeated by the amount of amenities there are -->
-
-                            <form method="get" action="Menus.html">
-                                <textarea rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AmenitiesModal5" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AmenitiesModal4" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>Amenities</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Amenities</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h1 class="question">Additional Needs</h1>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h1 class="question">Additional Needs</h1>
+                                    </div>
                                 </div>
+
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
                             </div>
-
-                            <!-- This is repeated by the amount of amenities there are -->
-
-                            <form method="get" action="Menus.html">
-                                <textarea rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div id="AmenitiesModal6" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
+                <div id="AmenitiesModal5" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
 
-                    <div class="modal-header">
-                        <span class="close">×</span>
-                        <h2>Amenities</h2>
-                    </div>
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Amenities</h2>
+                        </div>
 
-                    <div class="modal-body ">
-                        <div class="row">
+                        <div class="modal-body ">
                             <div class="row">
-                                <div class="row questionDiv">
-                                    <h1 class="question">Additional Needs</h1>
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h1 class="question">Additional Needs</h1>
+                                    </div>
                                 </div>
+
+                                <!-- This is repeated by the amount of amenities there are -->
+
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
                             </div>
-
-                            <!-- This is repeated by the amount of amenities there are -->
-
-                            <form method="get" action="Menus.html">
-                                <textarea rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-                            </form>
                         </div>
                     </div>
                 </div>
-            </div>
+
+                <div id="AmenitiesModal6" class="modal">
+                    <!-- Modal content -->
+                    <div class="modal-content">
+
+                        <div class="modal-header">
+                            <span class="close">×</span>
+                            <h2>Amenities</h2>
+                        </div>
+
+                        <div class="modal-body ">
+                            <div class="row">
+                                <div class="row">
+                                    <div class="row questionDiv">
+                                        <h1 class="question">Additional Needs</h1>
+                                    </div>
+                                </div>
+
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
 
             <footer>
                 <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
@@ -1696,6 +1430,7 @@
                 $(document).ready(function () {
                     //$(location).attr('href', 'www.google.co.in');
                     var days = $("#days").val();
+                    //alert(days);
                     if (days == 0) {
                         $("#form").attr('action', 'SleepingRooms.php');
                     } else {
