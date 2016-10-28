@@ -42,7 +42,7 @@
                 <ul class="nav navbar-nav">
                     <!-- This title has to be changed according to the menu category selected-->
                     <li>
-                        <H1 class="NavEventPlanner"> AV Aids </H1>
+                        <H1 class="NavEventPlanner"> Edit AV Aids </H1>
                     </li>
 
                 </ul>
@@ -57,13 +57,9 @@
         <div class="container">
             <div class="row">
                 <div class="row">
-                    <div class="row questionDiv">
-                        <h1 class="question">We are always prepared to fulfill your needs to assure the success of your event </h1>
-                    </div>
                 </div>
                 <!-- This is repeated by the amount of category options there are -->
 
-                <form method="get" action="SleepingRooms.html">
                     <div class="row" id="tableClothPackages">
 
                         <div class="form-group row EventRooms">
@@ -112,30 +108,48 @@
 
                         <!-- This is repeated by the amount of amenities there are  -->
 
-                        <div class="form-group row">
-                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
-                            </div>
-                        </div>
-
                     </div>
 
 
                     <div class="form-group row">
-                        <label for="submit" class="col-md-2 col-form-label"> </label>
+                        <label for="submit" class="col-md-1 col-form-label"></label> 
                         <div class="col-md-3">
-                        </div>
-                        <label for="submit" class="col-md-2 col-form-label"></label>
+                            <button id="myBtnAmenities3" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete AvAid</button>
+                        </div> 
+                    </div> 
+                    <div class="form-group row">
+                        <label for="submit" class="col-md-1 col-form-label"></label> 
                         <div class="col-md-3">
-                            <input type="submit" class="button" value="Next">
-                        </div>
+                            <button id="addAvAidsBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Add AvAid</button>
+                        </div> 
                     </div>
 
-                </form>
+            </div>
+        </div>
+    </div> 
+    
+    <div id="modalAddAvAid" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <span class="close">×</span>
+                <h2>Add AvAid</h2>
+            </div>
+
+            <div class="modal-body ">
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*AV Aid name: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                    </div>
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Price: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="number" value="" name="first-name" id="first-name" required>
+                    </div>
+                </div> 
+                    <input type="button" class="button" value="Add">
             </div>
         </div>
     </div>
@@ -143,26 +157,62 @@
     <footer>
         <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
         <H1 id="footerID">©1996 - 2016 Marriott International, Inc. All rights reserved. Marriott proprietary information.</H1>
-
     </footer>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#yes").click(function () {
-                $("#tableClothPackages").show();
-            });
-            $("#no").click(function () {
-                $("#tableClothPackages").hide();
-            });
+ 
 
-        });
-    </script>
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script>
+                // Get the modal
+                var modalAddAvAid = document.getElementById('modalAddAvAid');
+
+                // Get the button that opens the modal
+                var btnAddAvAid = document.getElementById("addAvAidsBtn");
+ 
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                var functionModalAddAvAid = function () {
+                    modalAddAvAid .style.display = "block";
+                }
+     
+                    // When the user clicks the button, open the modal
+                btnAddAvAid.onclick = functionModalAddAvAid; 
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                        modalAddAvAid.style.display = "none";
+                }
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modalAddAvAid) {
+                        modalAddAvAid.style.display = "none";
+                    }
+                }
+
+            </script>
+
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="js/bootstrap.min.js"></script>
+
+
+            <script>
+                $(document).ready(function () {
+                    //$(location).attr('href', 'www.google.co.in');
+                    var days = $("#days").val();
+                    //alert(days);
+                    if (days == 0) {
+                        $("#form").attr('action', 'SleepingRooms.php');
+                    } else {
+                        $("#form").attr('action', 'EventInformation.php');
+                    }
+                });
+            </script>
 </body>
 
 </html>

@@ -41,7 +41,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <H1 class="NavEventPlanner"> Menu </H1>
+                        <H1 class="NavEventPlanner"> Edit Menu </H1>
                     </li>
 
                 </ul>
@@ -55,15 +55,9 @@
 
         <div class="container">
             <div class="row">
-                <div class="row">
-                    <div class="row questionDiv">
-                        <h1 class="question">We are proud to offer you the following Food and Beverage options </h1>
-                    </div>
-                </div>
 
                 <!-- This is repeated by the amount of amenities there are -->
 
-                <form method="get" action="AvAids.html">
                     <div class="row" id="tableClothPackages">
                         <div class="form-group row EventRooms">
                             <label for="single" class="col-md-4 col-form-label EventRoomLabel">Breakfast</label>
@@ -73,7 +67,7 @@
 
                         <div class="form-group row EventRooms">
                             <div class="col-md-4">
-                                <a href="MenuCategoryOptions.html">
+                                <a href="EditMenuCategoryOptions.html">
                                     <img alt="package1" class="marriottEventRooms" src="photos/Menu/Breakfast.jpg" />
                                 </a>
                             </div>
@@ -105,17 +99,6 @@
                     </div>
 
 
-                    <div class="form-group row">
-                        <label for="submit" class="col-md-2 col-form-label"> </label>
-                        <div class="col-md-3">
-                        </div>
-                        <label for="submit" class="col-md-2 col-form-label"></label>
-                        <div class="col-md-3">
-                            <input type="submit" class="button" value="Next">
-                        </div>
-                    </div>
-
-                </form>
             </div>
 
             <div class="row bottomReward">
@@ -139,7 +122,6 @@
             $("#no").click(function () {
                 $("#tableClothPackages").hide();
             });
-
         });
     </script>
 

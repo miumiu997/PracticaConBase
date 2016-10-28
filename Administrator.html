@@ -41,7 +41,7 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
                     <li>
-                        <H1 class="NavEventPlanner"> Additional Needs </H1>
+                        <H1 class="NavEventPlanner"> Edit </H1>
                     </li>
 
                 </ul>
@@ -57,29 +57,65 @@
             <div class="row">
                 <div class="row">
                     <div class="row questionDiv">
-                        <h1 class="question">Additional Needs</h1>
+                        <h1 class="question">Select the category you wish to edit </h1>
                     </div>
                 </div>
 
                 <!-- This is repeated by the amount of amenities there are -->
 
-                <form method="get" action="Menus.html">
-                    <textarea rows="10" cols="60" placeholder="Tell us more about your needs specific  i.e. tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
-
-
-                    <div class="form-group row">
-                        <label for="submit" class="col-md-2 col-form-label"> </label>
-                        <div class="col-md-3">
+                    <div class="row" id="tableClothPackages">
+                        <div class="form-group row EventRooms">
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Event Rooms</label>
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Menu</label>
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">AV Aids</label>
                         </div>
-                        <label for="submit" class="col-md-2 col-form-label"></label>
-                        <div class="col-md-3">
-                            <input type="submit" class="button" value="Next">
+
+                        <div class="form-group row EventRooms">
+                            <div class="col-md-4">
+                                <a href="EditEventRooms.php">
+                                    <img alt="package1" class="marriottEventRooms" src="photos/cedral.jpg" />
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="EditMenuCategories.html">
+                                    <img alt="package2" class="marriottEventRooms" src="photos/Menu/Breakfast.jpg" /> 
+                                </a>
+                            </div>
+                            <div class="col-md-4">   
+                                <a href="EditAvAids.html">
+                                    <img alt="package3" class="marriottEventRooms" src="photos/AVAids.jpg" /> 
+                                </a>
+                            </div>
                         </div>
+
+                        <!-- This is repeated by the amount of amenities there are  -->
+
                     </div>
 
-                </form>
+                    <div class="row" id="tableClothPackages">
+                        <div class="form-group row EventRooms">
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Users</label>
+                        </div>
+
+                        <div class="form-group row EventRooms">
+                            <div class="col-md-4">
+                                <a href="EditUser.html">
+                                    <img alt="package1" class="marriottEventRooms" src="photos/users.jpg" />
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- This is repeated by the amount of amenities there are  -->
+
+                    </div>
+
+
+
+
             </div>
 
+            <div class="row bottomReward">
+            </div>
 
         </div>
     </div>
@@ -90,6 +126,18 @@
 
     </footer>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#yes").click(function () {
+                $("#tableClothPackages").show();
+            });
+            $("#no").click(function () {
+                $("#tableClothPackages").hide();
+            });
+
+        });
+    </script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>

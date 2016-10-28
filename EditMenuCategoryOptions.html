@@ -121,30 +121,22 @@
                         </div>   
                         <!-- This is repeated by the amount of amenities there are  --> 
 
-                        <div class="form-group row"> 
-                            <label class="col-md-4 col-form-label PackageLabel">Other</label> 
-                            <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                        </div> 
-                        
-                        <div class="row"> 
-                            <div class="col-md-6">
-                                <textarea rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire…
-"></textarea>
-                            </div>  
-                            <div class="form-group row">
-                                <label for="submit" class="col-md-2 col-form-label"> </label>
-                                <div class="col-md-3">
-                                </div>
-                                <label for="submit" class="col-md-2 col-form-label"></label>
-                                <div class="col-md-3">
-                                    <input type="submit" class="button" value="Next">
-                                </div>
-                            </div>
-                        </div>
 
                     </div>
  
 
+                    <div class="form-group row">
+                        <label for="submit" class="col-md-1 col-form-label"></label> 
+                        <div class="col-md-3">
+                            <button id="myBtnAmenities3" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete Menu Option</button>
+                        </div> 
+                    </div> 
+                    <div class="form-group row">
+                        <label for="submit" class="col-md-1 col-form-label"></label> 
+                        <div class="col-md-3">
+                            <button id="addMenuOptionBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Add New Menu Option</button>
+                        </div> 
+                    </div> 
 
 
                 </form>
@@ -154,24 +146,125 @@
         </div>
     </div>
     
+    <div id="modalAddCategoryOption" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <span class="close">×</span>
+                <h2>Add New Menu Option</h2>
+            </div>
+
+            <div class="modal-body ">
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Name: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                    </div> 
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Price: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                    </div> 
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Dishes: </label> 
+                </div>  
+
+                <div class = "row">  
+                     <div class="input_fields_wrap col-md-4 col-md-offset-3 ">
+                        <button class="add_field_button AddBtn">Click here to add another dish </button>
+                        <div>
+                            <input type="text" name="mytext[]" class="CommentInput col-m form-control" /> 
+
+                            <a href="#" class="remove_field RemoveBtn">Remove</a>
+                        </div> 
+                    </div>
+                </div> 
+
+                <input type="button" class="button" value="Add">
+            </div>
+        </div>
+    </div>
+
     <footer> 
               <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
               <H1 id="footerID">©1996 - 2016 Marriott International, Inc. All rights reserved. Marriott proprietary information.</H1>
 
     </footer>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script>
+                // Get the modal
+                var modalAddMenuCategoryOption = document.getElementById('modalAddCategoryOption');
+
+                // Get the button that opens the modal
+                var btnAddMenuOption = document.getElementById("addMenuOptionBtn");
+ 
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
+
+                var functionModalAddMenuCategoryOption = function () {
+                    modalAddMenuCategoryOption.style.display = "block";
+                }
+     
+                    // When the user clicks the button, open the modal
+                btnAddMenuOption.onclick = functionModalAddMenuCategoryOption; 
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                        modalAddMenuCategoryOption.style.display = "none";
+                }
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modalAddMenuCategoryOption) {
+                        modalAddMenuCategoryOption.style.display = "none";
+                    }
+                }
+
+            </script>
+
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="js/bootstrap.min.js"></script>
+
+
+            <script>
+                $(document).ready(function () {
+                    //$(location).attr('href', 'www.google.co.in');
+                    var days = $("#days").val();
+                    //alert(days);
+                    if (days == 0) {
+                        $("#form").attr('action', 'SleepingRooms.php');
+                    } else {
+                        $("#form").attr('action', 'EventInformation.php');
+                    }
+                });
+            </script> 
+
     <script>
-       $(document).ready(function() {
-           $("#yes").click(function() {
-               $("#tableClothPackages").show();
-           });
-           $("#no").click(function() {
-               $("#tableClothPackages").hide();
-           });
-           
-       });
-    </script> 
+        $(document).ready(function () {
+            var max_fields = 30; //maximum input boxes allowed
+            var wrapper = $(".input_fields_wrap"); //Fields wrapper
+            var add_button = $(".add_field_button"); //Add button ID
+
+            var x = 1; //initlal text box count
+            $(add_button).click(function (e) { //on add input button click
+                e.preventDefault();
+                if (x < max_fields) { //max input box allowed
+                    x++; //text box increment
+                    $(wrapper).append("<div><input type='text' name='mytext[]' class='CommentInput form-control'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
+                }
+            });
+
+            $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
+                e.preventDefault();
+                $(this).parent('div').remove();
+                x--;
+            })
+        });
+    </script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
