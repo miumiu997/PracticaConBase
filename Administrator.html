@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -40,8 +39,9 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
+                    <!-- This title has to be changed according to the menu category selected-->
                     <li>
-                        <H1 class="NavEventPlanner"> Edit </H1>
+                        <H1 class="NavEventPlanner"> Edit Users </H1>
                     </li>
 
                 </ul>
@@ -53,96 +53,108 @@
             <!-- /.navbar-collapse -->
         </nav>
 
-        <div class="container">
-            <div class="row">
-                <div class="row">
-                    <div class="row questionDiv">
-                        <h1 class="question">Select the category you wish to edit </h1>
-                    </div>
-                </div>
-
-                <!-- This is repeated by the amount of amenities there are -->
-
-                    <div class="row" id="tableClothPackages">
-                        <div class="form-group row EventRooms">
-                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Event Rooms</label>
-                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Menu</label>
-                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">AV Aids</label>
-                        </div>
-
-                        <div class="form-group row EventRooms">
-                            <div class="col-md-4">
-                                <a href="EditEventRooms.php">
-                                    <img alt="package1" class="marriottEventRooms" src="photos/cedral.jpg" />
-                                </a>
-                            </div>
-                            <div class="col-md-4">
-                                <a href="EditMenuCategories.html">
-                                    <img alt="package2" class="marriottEventRooms" src="photos/Menu/Breakfast.jpg" /> 
-                                </a>
-                            </div>
-                            <div class="col-md-4">   
-                                <a href="EditAvAids.html">
-                                    <img alt="package3" class="marriottEventRooms" src="photos/AVAids.jpg" /> 
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- This is repeated by the amount of amenities there are  -->
-
-                    </div>
-
-                    <div class="row" id="tableClothPackages">
-                        <div class="form-group row EventRooms">
-                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Users</label>
-                        </div>
-
-                        <div class="form-group row EventRooms">
-                            <div class="col-md-4">
-                                <a href="EditUser.html">
-                                    <img alt="package1" class="marriottEventRooms" src="photos/users.jpg" />
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- This is repeated by the amount of amenities there are  -->
-
-                    </div>
-
-
-
-
-            </div>
-
-            <div class="row bottomReward">
-            </div>
-
+        <div>
+            <table id="table">
+                <tr>
+                    <th> </th>
+                    <th>Username</th>
+                    <th>Type</th> 
+                    <th>Update</th>
+                    <th>Delete</th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>miumiu</td>
+                    <td>Administrator</td> 
+                    <td><input type="button"  value="Update"></td>
+                    <td><input type="button"  value="Delete"></td>
+                </tr>
+                  
+            </table>
+        </div> 
+        
+        <div class="form-group row">
+            <label for="submit" class="col-md-1 col-form-label"></label> 
+            <div class="col-md-3">
+                <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">New User</button>
+            </div> 
         </div>
+
     </div>
 
+    <div id="modalCreateUser" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <span class="close">×</span>
+                <h2>Create New User</h2>
+            </div>
+
+            <div class="modal-body ">
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Username: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="text" value="" name="username" id="first-name" required>
+                    </div>
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Password: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="number" value="" name="password" id="first-name" required>
+                    </div>
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Verify Password: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="number" value="" name="verify-password" id="first-name" required>
+                    </div>
+                </div> 
+                
+                <input type="button" class="button" value="Create">
+            </div>
+        </div>
+    </div>
     <footer>
         <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
         <H1 id="footerID">©1996 - 2016 Marriott International, Inc. All rights reserved. Marriott proprietary information.</H1>
-
     </footer>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#yes").click(function () {
-                $("#tableClothPackages").show();
-            });
-            $("#no").click(function () {
-                $("#tableClothPackages").hide();
-            });
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <script>
+                // Get the modal
+                var modalCreateUser = document.getElementById('modalCreateUser');
 
-        });
-    </script>
+                // Get the button that opens the modal
+                var btnCreateUser = document.getElementById("createNewUserbtn");
+ 
+                // Get the <span> element that closes the modal
+                var span = document.getElementsByClassName("close")[0];
 
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
+                var functionModalAddAvAid = function () {
+                    modalCreateUser.style.display = "block";
+                }
+     
+                    // When the user clicks the button, open the modal
+                btnCreateUser.onclick = functionModalAddAvAid; 
+
+                // When the user clicks on <span> (x), close the modal
+                span.onclick = function () {
+                        modalCreateUser.style.display = "none";
+                }
+                // When the user clicks anywhere outside of the modal, close it
+                window.onclick = function (event) {
+                    if (event.target == modalCreateUser) {
+                        modalCreateUser.style.display = "none";
+                    }
+                }
+
+            </script>
+
+            <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            <!-- Include all compiled plugins (below), or include individual files as needed -->
+            <script src="js/bootstrap.min.js"></script>
+
 </body>
 
 </html>

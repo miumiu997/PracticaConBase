@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -39,9 +40,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <!-- This title has to be changed according to the menu category selected-->
                     <li>
-                        <H1 class="NavEventPlanner"> Edit User </H1>
+                        <H1 class="NavEventPlanner"> Edit </H1>
                     </li>
 
                 </ul>
@@ -53,48 +53,61 @@
             <!-- /.navbar-collapse -->
         </nav>
 
-        <div>
-            <table id="table">
-                <tr>
-                    <th> </th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Type</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>Name Last Name</td>
-                    <td>RequestNumber</td>
-                    <td>Date</td>
-                </tr>
-                  
-            </table>
+        <div class="container">
+            <div class="row">
+                <div class="row">
+                    <div class="row questionDiv">
+                        <h1 class="question">Select the category you wish to edit </h1>
+                    </div>
+                </div>
+
+                <!-- This is repeated by the amount of amenities there are -->
+
+                    <div class="row" id="tableClothPackages">
+                        <div class="form-group row EventRooms">
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Event Rooms</label>
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">Menu</label>
+                            <label for="single" class="col-md-4 col-form-label EventRoomLabel">AV Aids</label>
+                        </div>
+
+                        <div class="form-group row EventRooms">
+                            <div class="col-md-4">
+                                <a href="EditEventRooms.php">
+                                    <img alt="EventRoomCedral" class="marriottEventRooms" src="photos/cedral.jpg" />
+                                </a>
+                            </div>
+                            <div class="col-md-4">
+                                <a href="EditMenuCategories.html">
+                                    <img alt="Menu" class="marriottEventRooms" src="photos/Menu/Breakfast.jpg" /> 
+                                </a>
+                            </div>
+                            <div class="col-md-4">   
+                                <a href="EditAvAids.html">
+                                    <img alt="AvAids" class="marriottEventRooms" src="photos/AVAids.jpg" /> 
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- This is repeated by the amount of amenities there are  -->
+
+                    </div>
+
+
+            </div>
+
+            <div class="row bottomReward">
+            </div>
+
         </div>
     </div>
 
     <footer>
         <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
         <H1 id="footerID">©1996 - 2016 Marriott International, Inc. All rights reserved. Marriott proprietary information.</H1>
+
     </footer>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $("#search").click(function () {
-                //alert($('#search_request_input').val());
-                $.ajax({
-                    method: 'GET',
-                    url: 'ajaxSearch.php?search=' + $('#search_request_input').val(),
-                    data: {},
-                    success: function (data) {
-                        //alert(data);
-                        $('#table').empty();
-                        $('#table').append(data);
-                    }
-                });
-            });
-        });
-    </script>
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
