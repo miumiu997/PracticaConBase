@@ -248,7 +248,7 @@
             $("#DeleteBreakFastOption").click(function (){  
                // alert("entre");
                 $('#BreakfastOptions :checked').each(function(){
-                    alert($(this).val()); 
+                    //alert($(this).val()); 
                     $.ajax({
                         method: 'POST',
                         url: 'ajaxDeleteCategoryOption.php',
@@ -268,12 +268,75 @@
             }); 
 
             $("#CreateBreakfastOption").click(function (){  
-                alert("entre"); 
-                alert($("#dishOptionName").val()); 
-                alert($("#dishOptionPrice").val());
-                $( ".DishName" ).each(function(button) {
-                       alert(button.val());
-                });  
+                //alert("entre"); 
+                //alert($("#dishOptionName").val()); 
+                //alert($("#dishOptionPrice").val());   
+
+                //verifies that all the spaces are filled
+                if($("#dishOptionName").val() != "" && $("#dishOptionPrice").val() != ""){   
+                    //alert("All Filled"); 
+                    //alert(!isNaN($("#dishOptionPrice").val()) );
+
+                    //verifies that the price is a number
+                    if( !isNaN($("#dishOptionPrice").val()) ){  
+                        alert("yaaay integers");  
+
+                        //creates the menu category   
+                        $.ajax({
+                            method: 'POST',
+                            url: 'ajaxCreateBreakfastCategory.php',
+                            data: { 
+                                OptionName: $("#dishOptionName").val(),
+                                OptionPrice: $("#dishOptionPrice").val()
+                            },
+                            success: function(data){ 
+                                alert(data);
+                                if (data != -1){    
+                                    //goes through all the dishes 
+                                    $(".DishName").each(function(index) { 
+                                        //alert($(this).val()); 
+ 
+                                        //inserts dishes
+                                        $.ajax({
+                                            method: 'POST',
+                                            url: 'ajaxInsertBreakfastDishes.php',
+                                            data: { 
+                                                CategoryOptionId: data, 
+                                                DishName: $(this).val()
+                                            },
+                                            success: function(data){ 
+                                                //alert(data);
+                                                if (data == "-1"){   
+                                                    alert("An error has occurred, please try again later.");
+                                                }else{ 
+                                                    alert("Breakfast Option has been successfully created.");
+
+                                                }
+                                            }
+                                       });  
+
+                                    }); 
+
+                                }else{  
+                                    alert("An error has occurred, please try again later");
+
+                                }
+                            }
+                       });
+
+
+                    }else{ 
+                        alert("Please enter a number for the price.");
+                    }
+
+                }else{ 
+                    alert("Please fill in the blanks!");
+                }
+
+  
+
+
+ 
 
             });
         });
