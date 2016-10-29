@@ -139,31 +139,31 @@
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Name: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                        <input class="form-control" type="text" name="dishOptionName" id="dishOptionName" required>
                     </div> 
                 </div>  
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Price: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                        <input class="form-control" type="text" name="dishOptionPrice" id="dishOptionPrice" required>
                     </div> 
                 </div>  
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Dishes: </label> 
                 </div>  
 
-                <div class = "row">  
+                <div class = "row" id="Dishes">  
                      <div class="input_fields_wrap col-md-4 col-md-offset-3 ">
                         <button class="add_field_button AddBtn">Click here to add another dish </button>
                         <div>
-                            <input type="text" name="mytext[]" class="CommentInput col-m form-control" /> 
+                            <input type="text" name="mytext[]" class="DishName col-m form-control" /> 
 
                             <a href="#" class="remove_field RemoveBtn">Remove</a>
                         </div> 
                     </div>
                 </div> 
 
-                <input type="button" class="button" value="Add">
+                <input type="button" class="button" value="Create" id="CreateBreakfastOption">
             </div>
         </div>
     </div>
@@ -235,7 +235,7 @@
                 e.preventDefault();
                 if (x < max_fields) { //max input box allowed
                     x++; //text box increment
-                    $(wrapper).append("<div><input type='text' name='mytext[]' class='CommentInput form-control'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
+                    $(wrapper).append("<div><input type='text' name='mytext[]' class='DishName form-control'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
                 }
             });
 
@@ -265,6 +265,16 @@
                 });   
 
                 location.reload();
+            }); 
+
+            $("#CreateBreakfastOption").click(function (){  
+                alert("entre"); 
+                alert($("#dishOptionName").val()); 
+                alert($("#dishOptionPrice").val());
+                $( ".DishName" ).each(function(button) {
+                       alert(button.val());
+                });  
+
             });
         });
     </script>

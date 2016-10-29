@@ -218,7 +218,7 @@
             }); 
 
             $("#deleteAvAidsBtn").click(function (){  
-                alert("entre");
+               // alert("entre");
                 $('#AllAvAids :checked').each(function(){
                     alert($(this).val()); 
                     $.ajax({
@@ -227,7 +227,8 @@
                         data: { 
                             avAidId: $(this).val()
                         },
-                        success: function(data){
+                        success: function(data){ 
+                            //alert(data);
                             if (data != "1"){   
                                 alert("An error has occurred, please try again later");
                             }

@@ -52,33 +52,54 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
+        <div class="col-md-offset-0">
+                <div class="col-md-2">
+                    <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">New User</button>
+                </div> 
+                <div class="col-md-2">
+                    <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Update User</button>
+                </div>  
 
+                <div class="col-md-2">
+                    <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete User</button>
+                 </div>  
+
+        </div>
         <div>
             <table id="table">
                 <tr>
-                    <th> </th>
-                    <th>Username</th>
-                    <th>Type</th> 
-                    <th>Update</th>
-                    <th>Delete</th>
+                    <th class="col-md-2">Username</th>
+                    <th class="col-md-2">Type</th> 
+                    <th class="col-md-1">Update</th>
+                    <th class="col-md-1">Delete</th>
                 </tr>
-                <tr>
-                    <td></td>
-                    <td>miumiu</td>
-                    <td>Administrator</td> 
-                    <td><input type="button"  value="Update"></td>
-                    <td><input type="button"  value="Delete"></td>
-                </tr>
+                <?php
+                    include_once("connection.php");
+
+                    $sql = "SELECT `User`, `Password`, `Type`, `ID` FROM `user/admin`";
+                    $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        // echo de los resultados   
+                        echo '<tr>'; 
+                        echo '  <td class="col-md-2">'. $row['User'] . '</td>';
+                        echo '  <td class="col-md-2">';
+                        if($row['Type'] == 1){
+                            echo 'Administrator';   
+                        }else{ 
+                            echo 'Event Planner';
+                        }
+                        echo '  </td>';
+                        echo '  <td class="col-md-1 radioUpdate"><input type="radio"  value='. $row['ID'] . '></td>';
+                        echo '  <td class="col-md-1"><input type="checkbox"  value='. $row['ID'] . '></td>';
+                        echo '</tr>';
+                    }
+                ?>
                   
             </table>
         </div> 
         
-        <div class="form-group row">
-            <label for="submit" class="col-md-1 col-form-label"></label> 
-            <div class="col-md-3">
-                <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">New User</button>
-            </div> 
-        </div>
+
 
     </div>
 
@@ -94,23 +115,30 @@
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Username: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="text" value="" name="username" id="first-name" required>
+                        <input class="form-control" type="email" value="" name="username" id="username" required>
                     </div>
                 </div>  
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Password: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="number" value="" name="password" id="first-name" required>
+                        <input class="form-control" type="password" value="" name="password" id="password" required>
                     </div>
                 </div>  
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Verify Password: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="number" value="" name="verify-password" id="first-name" required>
+                        <input class="form-control" type="password" value="" name="verify-password" id="verify-password" required>
                     </div>
-                </div> 
-                
-                <input type="button" class="button" value="Create">
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Type of User: </label>
+                    <select class="col-md-3" id="type">
+                      <option value="1">Admin</option>
+                      <option value="0">EventPlanner</option>
+                    </select> 
+                </div>
+
+                <input id="CreateUserBtn" type="submit" class="button" value="Create">
             </div>
         </div>
     </div>
@@ -146,7 +174,57 @@
                     if (event.target == modalCreateUser) {
                         modalCreateUser.style.display = "none";
                     }
-                }
+                }  
+
+                $(document).ready(function(){
+                   
+                    $("#CreateUserBtn").click(function (){
+                       // alert("entre"); 
+                        if($("#password").val() == $("#verify-password").val()){
+                           // alert("son iguales"); 
+                            //alert($("#type").find("option:selected").val());
+                            $.ajax({
+                                method: 'POST',
+                                url: 'ajaxCreateUser.php',
+                                data: { 
+                                    username: $("#username").val(), 
+                                    password: $("#password").val(), 
+                                    type: $("#type").find("option:selected").val()
+                                },
+                                success: function(data){ 
+                                    //alert(data);
+                                    if (data != "1"){   
+                                        alert("An error has occurred, please try again later");
+                                    }else{
+                                        location.reload();
+
+                                    }
+                                } 
+                             }); 
+                        } 
+                    }); 
+
+                    $("#deleteAvAidsBtn").click(function (){  
+                        alert("entre");
+                        $('#AllAvAids :checked').each(function(){
+                            alert($(this).val()); 
+                            $.ajax({
+                                method: 'POST',
+                                url: 'ajaxDeleteAvAid.php',
+                                data: { 
+                                    avAidId: $(this).val()
+                                },
+                                success: function(data){
+                                    if (data != "1"){   
+                                        alert("An error has occurred, please try again later");
+                                    }
+                                }
+                           }); 
+                        });   
+
+                        location.reload();
+                    });
+                });
 
             </script>
 
