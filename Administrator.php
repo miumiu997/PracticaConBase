@@ -52,13 +52,10 @@
             </div>
             <!-- /.navbar-collapse -->
         </nav>
-        <div class="col-md-offset-0">
+        <div class="col-md-offset-0" >
                 <div class="col-md-2">
                     <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">New User</button>
-                </div> 
-                <div class="col-md-2">
-                    <button id="updateUserBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Update User</button>
-                </div>  
+                </div>   
 
                 <div class="col-md-2">
                     <button id="deleteUserBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete User</button>
@@ -90,14 +87,15 @@
                             echo 'Event Planner';
                         }
                         echo '  </td>';
-                        echo '  <td class="col-md-1 "><input class="radioUpdate" name="radioUpdate" type="radio"  value='. $row['ID'] . '></td>';
+                        echo '  <td class="col-md-1 "><input class="radioUpdate" name="radioUpdate" type="radio"  onclick="radioButton()" value='. $row['ID'] . '></td>';
                         echo '  <td class="col-md-1"><input class="checkboxDelete" type="checkbox"  value='. $row['ID'] . '></td>';
                         echo '</tr>';
                     }
                 ?>
                   
             </table>
-        </div> 
+        </div>  
+        <div class="col-md-2" id="updateUserBtn"></div>
         
 
 
@@ -168,13 +166,15 @@
                 </div>  
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Type of User: </label>
-                    <select class="col-md-3" id="type">
+                    <select class="col-md-3" id="updateType">
                       <option value="1">Admin</option>
                       <option value="0">EventPlanner</option>
                     </select> 
                 </div>
+                <div class="row" >
+                    <input id="UpdateUserModalBtn" type="submit" class="button" value="Update"> 
+                </div>
 
-                <input id="UpdateUserModalBtn" type="submit" class="button" value="Update">
             </div>
         </div>
     </div>
@@ -200,7 +200,7 @@
                     modalCreateUser.style.display = "block";
                 }
 
-                var functionModalUpdateUser = function () {
+                var functionModalUpdateUser = function () { 
                     modalUpdateUser.style.display = "block";
                 }
      
@@ -226,32 +226,93 @@
                     }
                 }  
 
-                $(document).ready(function(){
-                   
-                    $("#CreateUserBtn").click(function (){
-                       // alert("entre"); 
-                        if($("#password").val() == $("#verify-password").val()){
-                           // alert("son iguales"); 
-                            //alert($("#type").find("option:selected").val());
-                            $.ajax({
-                                method: 'POST',
-                                url: 'ajaxCreateUser.php',
-                                data: { 
-                                    username: $("#username").val(), 
-                                    password: $("#password").val(), 
-                                    type: $("#type").find("option:selected").val()
-                                },
-                                success: function(data){ 
-                                    //alert(data);
-                                    if (data != "1"){   
-                                        alert("An error has occurred, please try again later");
-                                    }else{
-                                        location.reload();
 
-                                    }
+
+
+                function validateEmail(email) {
+                    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return re.test(email);
+                }  
+
+                function radioButton(){ 
+                        modalUpdateUser.style.display = "block";
+                }
+
+                $(document).ready(function(){ 
+
+                    $('#cancelUserModalBtn').click(function(){  
+                        modalUpdateUser.style.display = "none";
+
+                    });
+
+                    //when the CreateUserBtn is clicked
+                    $("#CreateUserBtn").click(function (){
+                        /*alert("entre");  
+                        alert($("#password").val() != ""); 
+                        alert($("#username").val() != ""); 
+                        alert($("#verify-password").val() != ""); 
+                        alert($("#password").val() != "" &&  $("#username").val() != "" && $("#verify-password").val() != ""); */
+
+                        //verifies that all the spaces are filed in 
+                        if( $("#password").val() != "" &&  $("#username").val() != "" && $("#verify-password").val() != ""){   
+
+                            //verifies that the username is an email 
+                            if( validateEmail($("#username").val()) ) { 
+
+                                //verifies that the passwords match
+                                if($("#password").val() == $("#verify-password").val()){
+                                    //alert($("#type").find("option:selected").val()); 
+ 
+                                    $.ajax({
+                                        method: 'POST',
+                                        url: 'ajaxCheckUser.php',
+                                        data: { 
+                                            username: $("#username").val(), 
+                                        },
+                                        success: function(data){ 
+                                            //alert(data); 
+                                            //The username doesn't exist 
+                                            if (data == "0"){    
+                                                $.ajax({
+                                                    method: 'POST',
+                                                    url: 'ajaxCreateUser.php',
+                                                    data: { 
+                                                        username: $("#username").val(), 
+                                                        password: $("#password").val(), 
+                                                        type: $("#type").find("option:selected").val()
+                                                    },
+                                                    success: function(data){ 
+                                                        //alert(data);
+                                                        if (data != "1"){   
+                                                            alert("An error has occurred, please try again later");
+                                                        }else{
+                                                            location.reload();
+
+                                                        }
+                                                    } 
+                                                }); 
+
+                                            }
+                                            else{
+                                                alert("The username already exists, please try again.");
+                                            }
+                                        } 
+                                    }); 
+
                                 } 
-                             }); 
-                        } 
+                                else{ 
+                                    alert("The passwords don't match. Please try again.");
+                                }
+                            } 
+                            else{ 
+                                alert("Its not an email");
+                            }
+
+                        }
+                        else{ 
+                            alert("Please fill in all the blanks");
+                        }
+ 
                     }); 
 
                     $("#deleteUserBtn").click(function (){  
@@ -277,26 +338,33 @@
 
                     }); 
 
-                    $("#UpdateUserModalBtn").click(function (){  
-                        alert("entre");
+                    // when the updateUserModalBtn is clicked
+                    $("#UpdateUserModalBtn").click(function (){   
+                        //for each checked radio button 
                         $('input:radio:checked').each(function(){
-                            alert($(this).val());  
-                            alert($("#updateUsername").val());    
+                            //alert($(this).val());  
+                            //alert($("#updatePassword").val()); 
+                            //alert($("#updateType").val());
 
                             // verifies that all the blanks are filled in
-                            if( $("#updatePassword").val() != "" && $("#updateUsername").val() != "" && $("#updateVerify-password").val() != ""){  
-                                //verifies that the passwords match
+                            if( $("#updatePassword").val() != ""  && $("#updateVerify-password").val() != ""){  
+                                //verifies that the passwords match 
+
                                 if($("#updatePassword").val() == $("#updateVerify-password").val()){
                                     $.ajax({
                                         method: 'POST',
-                                        url: 'ajaxDeleteUser.php',
+                                        url: 'ajaxUpdateUsername.php',
                                         data: { 
-                                            username: $(this).val(), 
-                                            password: $("#updatePassword").val() 
+                                            userId: $(this).val(),  
+                                            password: $("#updatePassword").val(),
+                                            type: $("#updateType").val()
                                         },
                                         success: function(data){
                                             if (data != "1"){   
                                                 alert("An error has occurred, please try again later");
+                                            }else{ 
+                                                location.reload(); 
+                                                alert("User successfully updated!");
                                             }
                                         }
                                    });
