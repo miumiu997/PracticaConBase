@@ -65,8 +65,7 @@
             <div class="row">
                 <!-- This is repeated by the amount of category options there are --> 
 
-                <form method="get" action="AvAids.html">  
-                    <div class="row" id="tableClothPackages">
+                    <div class="row" id="DinnerOptions">
                                     <?php
 
                                             $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 4"; // Dinner id = 1
@@ -76,7 +75,7 @@
 
                                                 echo '<div class="form-group row EventRooms">';
                                                 echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                                echo '  <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
+                                                echo '  <input class="col-md-2" id="radiobreakfast" type="checkbox" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
                                                 echo '</div>';
 
                                                 $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
@@ -112,7 +111,7 @@
                     <div class="form-group row">
                         <label for="submit" class="col-md-1 col-form-label"></label> 
                         <div class="col-md-3">
-                            <button id="myBtnAmenities3" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete Dinner Option</button>
+                            <button id="DeleteDinnerOptionBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete Dinner Option</button>
                         </div> 
                     </div> 
                     <div class="form-group row">
@@ -123,7 +122,6 @@
                     </div> 
 
 
-                </form>
             </div>              
             
 
@@ -246,7 +244,30 @@
                 e.preventDefault();
                 $(this).parent('div').remove();
                 x--;
-            })
+            }); 
+
+            $("#DeleteDinnerOptionBtn").click(function (){  
+               // alert("entre");
+                $('#DinnerOptions :checked').each(function(){
+                    //alert($(this).val()); 
+                    $.ajax({
+                        method: 'POST',
+                        url: 'ajaxDeleteCategoryOption.php',
+                        data: { 
+                            CategoryOptionId: $(this).val()
+                        },
+                        success: function(data){ 
+                            //alert(data);
+                            if (data != "1"){   
+                                alert("An error has occurred, please try again later");
+                            }
+                        }
+                   }); 
+                });   
+
+                location.reload();
+            });
+
         });
     </script>
 
