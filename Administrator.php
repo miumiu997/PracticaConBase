@@ -57,11 +57,11 @@
                     <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">New User</button>
                 </div> 
                 <div class="col-md-2">
-                    <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Update User</button>
+                    <button id="updateUserBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Update User</button>
                 </div>  
 
                 <div class="col-md-2">
-                    <button id="createNewUserbtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete User</button>
+                    <button id="deleteUserBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete User</button>
                  </div>  
 
         </div>
@@ -90,8 +90,8 @@
                             echo 'Event Planner';
                         }
                         echo '  </td>';
-                        echo '  <td class="col-md-1 radioUpdate"><input type="radio"  value='. $row['ID'] . '></td>';
-                        echo '  <td class="col-md-1"><input type="checkbox"  value='. $row['ID'] . '></td>';
+                        echo '  <td class="col-md-1 "><input class="radioUpdate" name="radioUpdate" type="radio"  value='. $row['ID'] . '></td>';
+                        echo '  <td class="col-md-1"><input class="checkboxDelete" type="checkbox"  value='. $row['ID'] . '></td>';
                         echo '</tr>';
                     }
                 ?>
@@ -141,6 +141,42 @@
                 <input id="CreateUserBtn" type="submit" class="button" value="Create">
             </div>
         </div>
+    </div> 
+
+
+    <div id="modalUpdateUser" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content ">
+            <div class="modal-header">
+                <span class="close">×</span>
+                <h2>Update User</h2>
+            </div>
+
+            <div class="modal-body ">
+ 
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Password: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="password" value="" name="updatePassword" id="updatePassword" required>
+                    </div>
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Verify Password: </label>
+                    <div class="col-md-3">
+                        <input class="form-control" type="password" value="" name="updateVerify-password" id="updateVerify-password" required>
+                    </div>
+                </div>  
+                <div class="row">
+                    <label for="first-name" class="col-md-2 col-form-label">*Type of User: </label>
+                    <select class="col-md-3" id="type">
+                      <option value="1">Admin</option>
+                      <option value="0">EventPlanner</option>
+                    </select> 
+                </div>
+
+                <input id="UpdateUserModalBtn" type="submit" class="button" value="Update">
+            </div>
+        </div>
     </div>
     <footer>
         <img class="marriottLogoFooter" height="40px" width="60px" src="logos/WhiteLogo.png" />
@@ -151,28 +187,42 @@
             <script>
                 // Get the modal
                 var modalCreateUser = document.getElementById('modalCreateUser');
+                var modalUpdateUser = document.getElementById('modalUpdateUser');
 
                 // Get the button that opens the modal
                 var btnCreateUser = document.getElementById("createNewUserbtn");
- 
+                var btnUpdateUser = document.getElementById("updateUserBtn");
+
                 // Get the <span> element that closes the modal
                 var span = document.getElementsByClassName("close")[0];
 
-                var functionModalAddAvAid = function () {
+                var functionModalCreateUser = function () {
                     modalCreateUser.style.display = "block";
+                }
+
+                var functionModalUpdateUser = function () {
+                    modalUpdateUser.style.display = "block";
                 }
      
                     // When the user clicks the button, open the modal
-                btnCreateUser.onclick = functionModalAddAvAid; 
+                btnCreateUser.onclick = functionModalCreateUser; 
+                btnUpdateUser.onclick = functionModalUpdateUser; 
 
                 // When the user clicks on <span> (x), close the modal
                 span.onclick = function () {
+
                         modalCreateUser.style.display = "none";
+                        modalUpdateUser.style.display = "none";
+
                 }
                 // When the user clicks anywhere outside of the modal, close it
                 window.onclick = function (event) {
                     if (event.target == modalCreateUser) {
                         modalCreateUser.style.display = "none";
+
+                    }
+                    if (event.target == modalUpdateUser) {
+                        modalUpdateUser.style.display = "none";
                     }
                 }  
 
@@ -204,26 +254,63 @@
                         } 
                     }); 
 
-                    $("#deleteAvAidsBtn").click(function (){  
-                        alert("entre");
-                        $('#AllAvAids :checked').each(function(){
-                            alert($(this).val()); 
+                    $("#deleteUserBtn").click(function (){  
+                        //alert("entre");
+                        $('input:checkbox:checked').each(function(){
+                            //alert($(this).val());  
                             $.ajax({
                                 method: 'POST',
-                                url: 'ajaxDeleteAvAid.php',
+                                url: 'ajaxDeleteUser.php',
                                 data: { 
-                                    avAidId: $(this).val()
+                                    userId: $(this).val()
                                 },
                                 success: function(data){
                                     if (data != "1"){   
                                         alert("An error has occurred, please try again later");
+                                    } 
+                                    else{
+                                        location.reload();
                                     }
                                 }
-                           }); 
+                           });
                         });   
 
-                        location.reload();
-                    });
+                    }); 
+
+                    $("#UpdateUserModalBtn").click(function (){  
+                        alert("entre");
+                        $('input:radio:checked').each(function(){
+                            alert($(this).val());  
+                            alert($("#updateUsername").val());    
+
+                            // verifies that all the blanks are filled in
+                            if( $("#updatePassword").val() != "" && $("#updateUsername").val() != "" && $("#updateVerify-password").val() != ""){  
+                                //verifies that the passwords match
+                                if($("#updatePassword").val() == $("#updateVerify-password").val()){
+                                    $.ajax({
+                                        method: 'POST',
+                                        url: 'ajaxDeleteUser.php',
+                                        data: { 
+                                            username: $(this).val(), 
+                                            password: $("#updatePassword").val() 
+                                        },
+                                        success: function(data){
+                                            if (data != "1"){   
+                                                alert("An error has occurred, please try again later");
+                                            }
+                                        }
+                                   });
+                                }else{ 
+                                    alert("Passwords don't match, please try again.")
+                                }
+                            }else{
+                                alert("Please fill in all the blanks");
+                            }
+
+                        });   
+
+                    }); 
+                    
                 });
 
             </script>
