@@ -1,6 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 
+    <?php
+        // Start the session
+        error_reporting(0);
+        include_once("connection.php");
+    
+        session_start();
+
+        $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+        $result = mysqli_query($conn, $sql) or die(mysql_error()); 
+
+        while ($row = mysqli_fetch_assoc($result)) {
+            $selectSetup = $selectSetup. '<option value="'.$row['ID'].'">'.$row['Name'].'</option>';
+        }
+    
+        
+        $avAidsOptions = '<div class="form-group row EventRooms">';
+        $sql = "SELECT `ID`, `Name`, `Price` FROM `avaids`";
+        $i = 0;
+        $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+        while ($row = mysqli_fetch_assoc($result)) {
+
+            $avAidsOptions = $avAidsOptions. '<div class="col-md-5 AvAidOptions">';
+            $avAidsOptions = $avAidsOptions. '  <div align="left">'. $row['Name'] .' <div align="right"> $'. $row['Price'] .'</div></div> ';
+            $avAidsOptions = $avAidsOptions. '</div>';
+            $avAidsOptions = $avAidsOptions. '<div class="col-md-1">';
+            $avAidsOptions = $avAidsOptions. '  <input type="checkbox" name="avAid&[]" value="'. $row['ID'] .'"></input>';
+            $avAidsOptions = $avAidsOptions. '</div>';
+
+            $i = $i + 1;
+            if ($i % 2 == 0){
+                $avAidsOptions = $avAidsOptions. "</div>";
+                $avAidsOptions = $avAidsOptions. '<div class="form-group row EventRooms">';
+            }
+
+        }
+
+        $avAidsOptions = $avAidsOptions. "</div>";
+    
+    ?> 
 
 <head>
     <meta charset="utf-8">
@@ -60,51 +100,12 @@
                 </div>
                 <!-- This is repeated by the amount of category options there are -->
 
-                    <div class="row" id="tableClothPackages">
+                    <div class="row" id="AllAvAids">
 
-                        <div class="form-group row EventRooms">
-                            <div class="col-md-4 AvAidOptions">
-                                <p>DVD Player/CD Player </p>
-                            </div>
-                            <div class="col-md-1">
-                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
-                            </div>
-                            <div class="col-md-4 AvAidOptions">
-                                <p>Projector</p>
-                            </div>
-                            <div class="col-md-1">
-                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
-                            </div>
-                        </div>
-                        <div class="form-group row EventRooms">
-                            <div class="col-md-4 AvAidOptions">
-                                <p>Screen Projector</p>
-                            </div>
-                            <div class="col-md-1">
-                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
-                            </div>
-                            <div class="col-md-4 AvAidOptions">
-                                <p>Acrylic Board</p>
-                            </div>
-                            <div class="col-md-1 AvAidOptions">
-                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
-                            </div>
-                        </div>
-                        <div class="form-group row EventRooms">
-                            <div class="col-md-4 AvAidOptions">
-                                <p>Conference Telephone</p>
-                            </div>
-                            <div class="col-md-1 AvAidOptions">
-                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
-                            </div>
-                            <div class="col-md-4 AvAidOptions">
-                                <p>Laser Pointer</p>
-                            </div>
-                            <div class="col-md-1 AvAidOptions">
-                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
-                            </div>
-                        </div>
-
+                        <?php
+                            $options = str_replace("&", "1", $avAidsOptions);
+                            echo $options;
+                        ?>
 
                         <!-- This is repeated by the amount of amenities there are  -->
 
@@ -114,7 +115,7 @@
                     <div class="form-group row">
                         <label for="submit" class="col-md-1 col-form-label"></label> 
                         <div class="col-md-3">
-                            <button id="myBtnAmenities3" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete AvAid</button>
+                            <button id="deleteAvAidsBtn" type="button" class="btn viewinfo2" data-toggle="modal" data-target="#myModal">Delete AvAid</button>
                         </div> 
                     </div> 
                     <div class="form-group row">
@@ -135,21 +136,23 @@
                 <span class="close">×</span>
                 <h2>Add AvAid</h2>
             </div>
-
-            <div class="modal-body ">
-                <div class="row">
-                    <label for="first-name" class="col-md-2 col-form-label">*AV Aid name: </label>
-                    <div class="col-md-3">
-                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
-                    </div>
-                </div>  
-                <div class="row">
-                    <label for="first-name" class="col-md-2 col-form-label">*Price: </label>
-                    <div class="col-md-3">
-                        <input class="form-control" type="number" value="" name="first-name" id="first-name" required>
-                    </div>
+            
+            <div id="CreateAvAidForm" >  
+                <div class="modal-body">
+                    <div class="row">
+                        <label for="first-name" class="col-md-2 col-form-label">*AV Aid name: </label>
+                        <div class="col-md-3">
+                            <input class="form-control" type="text" value="" name="first-name" id="AvAidName" required>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <label for="first-name" class="col-md-2 col-form-label">*Price: </label>
+                        <div class="col-md-3">
+                            <input class="form-control" type="number" value="" name="first-name" id="AvAidPrice" required>
+                        </div>
+                    </div> 
+                        <input type="button" class="button" value="Add" id="CreateAvAidBtn">
                 </div> 
-                    <input type="button" class="button" value="Add">
             </div>
         </div>
     </div>
@@ -191,7 +194,50 @@
                     if (event.target == modalAddAvAid) {
                         modalAddAvAid.style.display = "none";
                     }
-                }
+                } 
+
+        $(document).ready(function(){
+           
+            $("#CreateAvAidBtn").click(function (){
+                $.ajax({
+                    method: 'POST',
+                    url: 'ajaxCreateAvAid.php',
+                    data: { 
+                        name: $('#AvAidName').val(),
+                        price: $('#AvAidPrice').val()
+                    },
+                    success: function(data){
+                        if (data == "1"){   
+                            location.reload();
+                            alert("Success");
+                        } else{
+                            alert("An error has occurred, please try again later");
+                        }
+                    }
+               });
+            }); 
+
+            $("#deleteAvAidsBtn").click(function (){  
+                alert("entre");
+                $('#AllAvAids :checked').each(function(){
+                    alert($(this).val()); 
+                    $.ajax({
+                        method: 'POST',
+                        url: 'ajaxDeleteAvAid.php',
+                        data: { 
+                            avAidId: $(this).val()
+                        },
+                        success: function(data){
+                            if (data != "1"){   
+                                alert("An error has occurred, please try again later");
+                            }
+                        }
+                   }); 
+                });   
+
+                location.reload();
+            });
+        });
 
             </script>
 

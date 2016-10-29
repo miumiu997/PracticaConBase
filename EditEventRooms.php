@@ -7,52 +7,7 @@
     ?>
 
 
-    <?php
-    
-        $_SESSION['first-name'] = $_POST['first-name'];
-        $_SESSION['last-name'] = $_POST['last-name'];
-        $_SESSION['email'] = $_POST['email'];
-        $_SESSION['telephone'] = $_POST['telephone'];
-        $_SESSION['start-date'] = $_POST['start-date'];
-        $_SESSION['end-date'] = $_POST['end-date'];
-        $_SESSION['company'] = $_POST['company'];
-        $_SESSION['typeOfEvent'] = $_POST['typeOfEvent'];
-        $_SESSION['reason'] = $_POST['reason'];
-        $_SESSION['publish'] = $_POST['publish'];
-        //$_SESSION['logo'] = $_POST['logo'];
-
-        if ($_FILES['logo']['error'][0] > 0) {
-            //echo "Sí";
-            $imgData = file_get_contents($_FILES['logo']['tmp_name']);
-            $imgName = $_FILES["logo"]["name"];
-        } else {
-            //echo "No";
-            $imgData = "";
-            $imgName = "";
-        }
-    
-        
-        $_SESSION['imgData'] = $imgData;
-        $_SESSION['imgName'] = $imgName;
-
-        $_SESSION['event-name'] = $_POST['event-name'];
-
-        $date1 = new DateTime($_POST['start-date']);
-        $date2 = new DateTime($_POST['end-date']);
-
-        $diff = date_diff($date1, $date2);
-
-        $_SESSION['days'] = $diff->d + 1; 
-        $_SESSION['remainigDays'] = $diff->d;
-
-        
-        //move_uploaded_file($_FILES["logo"]["tmp_name"], $_FILES["logo"]["name"]);
-
-        //echo '<img src="'.$_FILES["logo"]["name"].'"/>';
-
-    ?>
-
-        <head>
+     <head>
             <meta charset="utf-8">
             <meta http-equiv="X-UA-Compatible" content="IE=edge">
             <meta name="viewport" content="width=device-width, initial-scale=1">

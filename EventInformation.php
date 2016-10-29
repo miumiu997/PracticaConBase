@@ -845,7 +845,7 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the AvAids needed...."></textarea>
                                         </div>
                                     </div>
 

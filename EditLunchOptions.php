@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+    <?php
+        // Start the session
+        error_reporting(0);
+        include_once("connection.php");
+    
+        session_start();
 
+        $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+        $result = mysqli_query($conn, $sql) or die(mysql_error());
+    ?>
 
 <head>
     <meta charset="utf-8">
@@ -56,71 +65,43 @@
                 <!-- This is repeated by the amount of category options there are --> 
 
                 <form method="get" action="AvAids.html">  
-                    <div class="row" id="tableClothPackages">
-                        <div class="form-group row EventRooms">
-                            <label class="col-md-4 col-form-label PackageLabel">Courtyard Breakfast</label> 
-                            <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
+                    <div class="row" id="tableClothPackages"> 
+                                    <?php
 
-                        </div>  
+                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 3"; // Lunch id = 1
+                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
 
-                        <div class="form-group row EventRooms"> 
-                            <div class="col-md-4">
-                                <p>- Variety of fruit</p>
-                            </div> 
-                            <div class="col-md-4">
-                                <p>- Your choice of eggs</p>
-                            </div>
-                            <div class="col-md-4">
-                                <p>- Variety of cheese and meats </p>
-                            </div>
-                        </div> 
-                        <div class="form-group row EventRooms"> 
-                            <div class="col-md-4">
-                                <p>- Bacon or Ham </p>
-                            </div> 
-                            <div class="col-md-4">
-                                <p>- Gallo Pinto </p>
-                            </div>
-                            <div class="col-md-4">
-                                <p>- Plantain or Cheese </p>
-                            </div>
-                        </div>
-                        <div class="form-group row EventRooms"> 
-                            <div class="col-md-4">
-                                <p>- Toast, butter or jam </p>
-                            </div> 
-                            <div class="col-md-4">
-                                <p>- Corn Tortillas</p>
-                            </div>
-                            <div class="col-md-4">
-                                <p>- 3 choices of beverages</p>
-                            </div>
-                        </div>
+                                            while ($row = mysqli_fetch_assoc($result)) {
 
-                        <div class="form-group row EventRooms">
-                            <label class="col-md-4 col-form-label PackageLabel">Working Breakfast</label>
-                            <input class="col-md-2" type="radio" name="vehicle2" value="EventRoomID"></input>
-                        </div>  
+                                                echo '<div class="form-group row EventRooms">';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
+                                                echo '</div>';
 
-                        <div class="form-group row EventRooms"> 
-                            <div class="col-md-4">
-                                <p>Your choice of bread</p>
-                            </div> 
-                            <div class="col-md-4">
-                                <p>Fresh Fruit Parfait</p>
-                            </div>
-                            <div class="col-md-4">
-                                <p>Yogurt</p>
-                            </div>
-                        </div>   
-                        
-                        <div class="form-group row EventRooms"> 
-                            <div class="col-md-4">
-                                <p>Honey, butter or Jam</p>
-                            </div> 
-                        </div>   
-                        <!-- This is repeated by the amount of amenities there are  --> 
+                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
 
+                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                                $i = 0;
+
+                                                echo '<div class="form-group row EventRooms">';
+                                                while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                    echo '  <div class="col-md-4">';
+                                                    echo '      <p>- '. $row2['Name'] .'</p>';
+                                                    echo '  </div>';
+
+                                                    $i = $i + 1;
+
+                                                    if ($i % 3 == 0) {
+                                                        echo "</div>";
+                                                        echo '<div class="form-group row EventRooms">';
+                                                    }
+                                                }
+                                                echo '</div>';
+                                            }
+
+                                        ?>
 
                     </div>
  
