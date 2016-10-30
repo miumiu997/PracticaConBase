@@ -138,13 +138,13 @@
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Name: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                        <input class="form-control" type="text" value="" name="first-name" id="dishOptionName" required>
                     </div> 
                 </div>  
                 <div class="row">
                     <label for="first-name" class="col-md-2 col-form-label">*Price: </label>
                     <div class="col-md-3">
-                        <input class="form-control" type="text" value="" name="first-name" id="first-name" required>
+                        <input class="form-control" type="text" value="" name="first-name" id="dishOptionPrice" required>
                     </div> 
                 </div>  
                 <div class="row">
@@ -155,14 +155,14 @@
                      <div class="input_fields_wrap col-md-4 col-md-offset-3 ">
                         <button class="add_field_button AddBtn">Click here to add another dish </button>
                         <div>
-                            <input type="text" name="mytext[]" class="CommentInput col-m form-control" /> 
+                            <input type="text" name="mytext[]" class=" DishName CommentInput col-m form-control" /> 
 
                             <a href="#" class="remove_field RemoveBtn">Remove</a>
                         </div> 
                     </div>
                 </div> 
 
-                <input type="button" class="button" value="Add">
+                <input type="button" class="button" value="Create" id="CreateCocktailOption">
             </div>
         </div>
     </div>
@@ -234,7 +234,7 @@
                 e.preventDefault();
                 if (x < max_fields) { //max input box allowed
                     x++; //text box increment
-                    $(wrapper).append("<div><input type='text' name='mytext[]' class='CommentInput form-control'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
+                    $(wrapper).append("<div><input type='text' name='mytext[]' class=' DishName CommentInput form-control'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
                 }
             });
 
@@ -264,6 +264,73 @@
                 });   
 
                 location.reload();
+            }); 
+
+            $("#CreateCocktailOption").click(function (){  
+                //alert("entre"); 
+                //alert($("#dishOptionName").val()); 
+                //alert($("#dishOptionPrice").val());   
+
+                //verifies that all the spaces are filled
+                if($("#dishOptionName").val() != "" && $("#dishOptionPrice").val() != ""){   
+                    //alert("All Filled"); 
+                    //alert(!isNaN($("#dishOptionPrice").val()) );
+
+                    //verifies that the price is a number
+                    if( !isNaN($("#dishOptionPrice").val()) ){  
+
+                        //creates the menu category   
+                        $.ajax({
+                            method: 'POST',
+                            url: 'ajaxCreateBreakfastCategory.php',
+                            data: { 
+                                OptionName: $("#dishOptionName").val(),
+                                OptionPrice: $("#dishOptionPrice").val(), 
+                                Category: 5
+                            },
+                            success: function(data){ 
+                                //alert(data);
+                                if (data != -1){    
+                                    //goes through all the dishes 
+                                    $(".DishName").each(function(index) { 
+                                        //alert($(this).val()); 
+ 
+                                        //inserts dishes
+                                        $.ajax({
+                                            method: 'POST',
+                                            url: 'ajaxInsertBreakfastDishes.php',
+                                            data: { 
+                                                CategoryOptionId: data, 
+                                                DishName: $(this).val()
+                                            },
+                                            success: function(data){ 
+                                                //alert(data);
+                                                if (data == "-1"){   
+                                                    alert("An error has occurred, please try again later."); 
+                                                    location.reload();
+                                                }
+                                            }
+                                       });  
+                                    });   
+
+                                    alert("Cocktail Option has been successfully created."); 
+                                    location.reload();
+
+                                }else{  
+                                    alert("An error has occurred, please try again later");
+
+                                }
+                            }
+                       });
+
+
+                    }else{ 
+                        alert("Please enter a number for the price.");
+                    }
+
+                }else{ 
+                    alert("Please fill in the blanks!");
+                } 
             });
 
         });

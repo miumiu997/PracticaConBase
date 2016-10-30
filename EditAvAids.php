@@ -198,29 +198,39 @@
 
         $(document).ready(function(){
            
-            $("#CreateAvAidBtn").click(function (){
-                $.ajax({
-                    method: 'POST',
-                    url: 'ajaxCreateAvAid.php',
-                    data: { 
-                        name: $('#AvAidName').val(),
-                        price: $('#AvAidPrice').val()
-                    },
-                    success: function(data){
-                        if (data == "1"){   
-                            location.reload();
-                            alert("Success");
-                        } else{
-                            alert("An error has occurred, please try again later");
-                        }
-                    }
-               });
+            $("#CreateAvAidBtn").click(function (){ 
+                if($('#AvAidName').val() != "" && $('#AvAidPrice').val() != ""){  
+                    if( !isNaN($('#AvAidPrice').val()) ){ 
+                        $.ajax({
+                            method: 'POST',
+                            url: 'ajaxCreateAvAid.php',
+                            data: { 
+                                name: $('#AvAidName').val(),
+                                price: $('#AvAidPrice').val()
+                            },
+                            success: function(data){
+                                if (data == "1"){   
+                                    location.reload();
+                                    alert("Success");
+                                } else{
+                                    alert("An error has occurred, please try again later");
+                                }
+                            }
+                       });  
+
+                    }else{ 
+                        alert("The price must be a number");
+                    } 
+                }else{ 
+                    alert("Please fill in all the blanks (Reminder: the price must be a number)");
+                }
+
             }); 
 
             $("#deleteAvAidsBtn").click(function (){  
                // alert("entre");
                 $('#AllAvAids :checked').each(function(){
-                    alert($(this).val()); 
+                    //alert($(this).val()); 
                     $.ajax({
                         method: 'POST',
                         url: 'ajaxDeleteAvAid.php',

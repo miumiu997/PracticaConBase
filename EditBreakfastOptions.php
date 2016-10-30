@@ -69,13 +69,13 @@
                         <!-- This is repeated by the amount of amenities there are  --> 
                                     <?php
 
-                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 1"; // breakfast id = 1
+                                            $sql = "SELECT `ID`, `Name` , `Price` FROM `categoryoptions` WHERE `IDMenuCategory` = 1"; // breakfast id = 1
                                             $result = mysqli_query($conn, $sql) or die(mysql_error());
 
                                             while ($row = mysqli_fetch_assoc($result)) {
 
                                                 echo '<div class="form-group row EventRooms">';
-                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'   $'. $row['Price'] . '</label>';
                                                 echo '  <input class="col-md-2" id="radiobreakfast" type="checkbox" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
                                                 echo '</div>';
 
@@ -279,7 +279,6 @@
 
                     //verifies that the price is a number
                     if( !isNaN($("#dishOptionPrice").val()) ){  
-                        alert("yaaay integers");  
 
                         //creates the menu category   
                         $.ajax({
@@ -287,10 +286,11 @@
                             url: 'ajaxCreateBreakfastCategory.php',
                             data: { 
                                 OptionName: $("#dishOptionName").val(),
-                                OptionPrice: $("#dishOptionPrice").val()
+                                OptionPrice: $("#dishOptionPrice").val(),
+                                Category: 1
                             },
                             success: function(data){ 
-                                alert(data);
+                                //alert(data);
                                 if (data != -1){    
                                     //goes through all the dishes 
                                     $(".DishName").each(function(index) { 
@@ -307,15 +307,15 @@
                                             success: function(data){ 
                                                 //alert(data);
                                                 if (data == "-1"){   
-                                                    alert("An error has occurred, please try again later.");
-                                                }else{ 
-                                                    alert("Breakfast Option has been successfully created.");
-
+                                                    alert("An error has occurred, please try again later."); 
+                                                    location.reload();
                                                 }
                                             }
                                        });  
+                                    });   
 
-                                    }); 
+                                    alert("Breakfast Option has been successfully created."); 
+                                    location.reload();
 
                                 }else{  
                                     alert("An error has occurred, please try again later");
@@ -331,13 +331,7 @@
 
                 }else{ 
                     alert("Please fill in the blanks!");
-                }
-
-  
-
-
- 
-
+                } 
             });
         });
     </script>

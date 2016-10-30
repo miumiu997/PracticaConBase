@@ -5,8 +5,9 @@
 
     $OptionName = $_POST['OptionName'];
     $OptionPrice = $_POST['OptionPrice']; 
+    $Category = $_POST['Category']; 
 
-    $sql = "INSERT INTO `categoryoptions` (`IDMenuCategory`, `Name`, `Price`) VALUES ( '1', '". $OptionName ."', '". $OptionPrice ."')";
+    $sql = "INSERT INTO `categoryoptions` (`IDMenuCategory`, `Name`, `Price`) VALUES ( '". $Category ."', '". $OptionName ."', '". $OptionPrice ."')";
     $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
 
     $sql = "SELECT `ID`, `IDMenuCategory`, `Name`, `Price` FROM `categoryoptions` WHERE Name = '". $OptionName ."' ";
