@@ -283,7 +283,7 @@
                         //creates the menu category   
                         $.ajax({
                             method: 'POST',
-                            url: 'ajaxCreateBreakfastCategory.php',
+                            url: 'ajaxCreateCategory.php',
                             data: { 
                                 OptionName: $("#dishOptionName").val(),
                                 OptionPrice: $("#dishOptionPrice").val(),
@@ -299,7 +299,7 @@
                                         //inserts dishes
                                         $.ajax({
                                             method: 'POST',
-                                            url: 'ajaxInsertBreakfastDishes.php',
+                                            url: 'ajaxInsertDishes.php',
                                             data: { 
                                                 CategoryOptionId: data, 
                                                 DishName: $(this).val()

@@ -67,13 +67,13 @@
                     <div class="row" id="cocktailoption">
                                     <?php
 
-                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 5"; // Cocktail id = 5
+                                            $sql = "SELECT `ID`, `Name`, `Price`  FROM `categoryoptions` WHERE `IDMenuCategory` = 5"; // Cocktail id = 5
                                             $result = mysqli_query($conn, $sql) or die(mysql_error());
 
                                             while ($row = mysqli_fetch_assoc($result)) {
 
                                                 echo '<div class="form-group row EventRooms">';
-                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] . '   $'. $row['Price'] .'</label>';
                                                 echo '  <input class="col-md-2" id="radiobreakfast" type="checkbox" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
                                                 echo '</div>';
 
@@ -131,7 +131,7 @@
         <div class="modal-content ">
             <div class="modal-header">
                 <span class="close">×</span>
-                <h2>Add New Lunch Option</h2>
+                <h2>Add New Cocktail Option</h2>
             </div>
 
             <div class="modal-body ">
@@ -282,7 +282,7 @@
                         //creates the menu category   
                         $.ajax({
                             method: 'POST',
-                            url: 'ajaxCreateBreakfastCategory.php',
+                            url: 'ajaxCreateCategory.php',
                             data: { 
                                 OptionName: $("#dishOptionName").val(),
                                 OptionPrice: $("#dishOptionPrice").val(), 
@@ -298,7 +298,7 @@
                                         //inserts dishes
                                         $.ajax({
                                             method: 'POST',
-                                            url: 'ajaxInsertBreakfastDishes.php',
+                                            url: 'ajaxInsertDishes.php',
                                             data: { 
                                                 CategoryOptionId: data, 
                                                 DishName: $(this).val()
