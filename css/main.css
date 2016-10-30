@@ -301,6 +301,12 @@ input[type='checkbox']:checked {
 	margin-left: 20%;
 	margin-right: 20%;
 	color:#537A08;
+} 
+
+/*Edit Event Room*/ 
+#EventRoomTable {  
+	border-collapse: collapse;  
+	border:none;
 }
 
 /*Modal*/ 
