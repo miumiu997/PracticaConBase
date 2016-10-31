@@ -170,12 +170,23 @@
                         //verifies that the name is filed in 
                         if( $("#setupName").val() != "" ){   
                             //alert("entre2");  
+                            
+                            var data = new FormData();
+                            $.each($('#logo')[0].files, function(i, file) {
+                                data.append("image", file);
+                            });
+                            
+                            data.append("name", $("#setupName").val());
+                            
+                            //alert(data);
+                            
                             $.ajax({
                                 method: 'POST',
                                 url: 'ajaxCreateSetup.php',
-                                data: { 
-                                    name: $("#setupName").val(), 
-                                },
+                                data: data,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
                                 success: function(data){ 
                                     //alert(data);
                                     if (data != "1"){   
@@ -266,9 +277,8 @@
             </script>
 
             <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+            
             <!-- Include all compiled plugins (below), or include individual files as needed -->
-            <script src="js/bootstrap.min.js"></script>
 
 </body>
 

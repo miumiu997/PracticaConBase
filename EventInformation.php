@@ -7,42 +7,8 @@
         include_once("connection.php");
     
         session_start();
-
-        $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
-        $result = mysqli_query($conn, $sql) or die(mysql_error());
-
-        $selectSetup = "";//'<option value="0"></option>';
-
-        while ($row = mysqli_fetch_assoc($result)) {
-            $selectSetup = $selectSetup. '<option value="'.$row['ID'].'">'.$row['Name'].'</option>';
-        }
     
-        
-        $avAidsOptions = '<div class="form-group row EventRooms">';
-        $sql = "SELECT `ID`, `Name` FROM `avaids`";
-        $i = 0;
-        $result = mysqli_query($conn, $sql) or die(mysql_error());
-
-        while ($row = mysqli_fetch_assoc($result)) {
-
-            $avAidsOptions = $avAidsOptions. '<div class="col-md-4 AvAidOptions">';
-            $avAidsOptions = $avAidsOptions. '  <p>'. $row['Name'] .'</p>';
-            $avAidsOptions = $avAidsOptions. '</div>';
-            $avAidsOptions = $avAidsOptions. '<div class="col-md-1">';
-            $avAidsOptions = $avAidsOptions. '  <input type="checkbox" name="avAid&[]" value="'. $row['ID'] .'"></input>';
-            $avAidsOptions = $avAidsOptions. '</div>';
-
-            $i = $i + 1;
-            if ($i % 2 == 0){
-                $avAidsOptions = $avAidsOptions. "</div>";
-                $avAidsOptions = $avAidsOptions. '<div class="form-group row EventRooms">';
-            }
-
-        }
-
-        $avAidsOptions = $avAidsOptions. "</div>";
-    
-        if ($_SERVER['HTTP_REFERER'] == "http://localhost/PracticaConBase/EventInformation.php"){
+        if ($_SERVER['HTTP_REFERER'] == "http://localhost/Mickey/EventInformation.php"){
             // Save inputs to $_SESISON
             
             $array = array(
@@ -82,11 +48,17 @@
             
             $_SESSION['day'. $_POST['days2']] = $array;
             
+            //var_dump($_SESSION);
+            
             //echo "<h1>" . $_POST['days2'] . "</h1>";
             //echo "<h1>" . $_SESSION['days'] . "</h1>";
             
             //var_dump($_SESSION['day'.$_POST['days2']]);
         }
+    
+        
+        $day = $_POST['days2'] + 1;
+        $str = 'day'. $day;
     
     ?>
 
@@ -105,9 +77,9 @@
         <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <![endif]-->
+          <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+          <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
     </head>
 
     <body>
@@ -161,7 +133,18 @@
                                 <div class="form-group row EventInfo">
                                     <label for="single" class="col-md-4 col-form-label">#Guests: </label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="number" value="" name="NoGuests[]" id="NoGuests">
+                                        <input class="form-control" type="number" name="NoGuests[]" id="NoGuests"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Breakfast']['NumberOfGuests']. '"';
+                                                    }
+                                                } 
+                                            ?>         
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
@@ -170,7 +153,27 @@
 
                                         <select class="form-control" name="RoomSetup[]" id="RoomSetup">
                                             <?php
-                                                echo $selectSetup;                                            
+                                                $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+                                                $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                                $selectSetup = "";//'<option value="0"></option>';
+
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<option value="'.$row['ID'].'"';
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        
+
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                            if ($_SESSION['events'][$str]['Breakfast']['setup'] == $row['ID']){
+                                                                echo ' selected';
+                                                            }
+                                                        }
+                                                    } 
+                                                    echo '>'.$row['Name'].'</option>';
+                                                }
+        
                                             ?>
                                         </select>
 
@@ -180,7 +183,18 @@
                                 <div class="form-group row EventInfo">
                                     <label for="single" class="col-md-4 col-form-label">Time: </label>
                                     <div class="col-md-8">
-                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" name="startTime[]" id="startTime"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Breakfast']['StartTime']. '"';
+                                                    }
+                                                } 
+                                            ?>                
+                                        >
                                     </div>
                                 </div>
 
@@ -212,21 +226,63 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="NoGuests[]" id="NoGuests">
+                                        <input class="form-control" type="number" name="NoGuests[]" id="NoGuests"
+                                              <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Morning Coffee Break']['NumberOfGuests']. '"';
+                                                    }
+                                                } 
+                                            ?>           
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
                                         <select class="form-control" name="RoomSetup[]" id="RoomSetup">
                                             <?php
-                                                echo $selectSetup;                                            
+                                                $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+                                                $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                                
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<option value="'.$row['ID'].'"';
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        
+
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                            if ($_SESSION['events'][$str]['Morning Coffee Break']['setup'] == $row['ID']){
+                                                                echo ' selected';
+                                                            }
+                                                        }
+                                                    } 
+                                                    echo '>'.$row['Name'].'</option>';
+                                                }
+        
                                             ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" name="startTime[]" id="startTime"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Morning Coffee Break']['StartTime']. '"';
+                                                    }
+                                                } 
+                                            ?>             
+                                        >
                                     </div>
                                 </div>
 
@@ -258,21 +314,63 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="NoGuests[]" id="NoGuests">
+                                        <input class="form-control" type="number" name="NoGuests[]" id="NoGuests"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Lunch']['NumberOfGuests']. '"';
+                                                    }
+                                                } 
+                                            ?>             
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
                                         <select class="form-control" name="RoomSetup[]" id="RoomSetup">
                                             <?php
-                                                echo $selectSetup;                                            
+                                                $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+                                                $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                                
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<option value="'.$row['ID'].'"';
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        
+
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                            if ($_SESSION['events'][$str]['Lunch']['setup'] == $row['ID']){
+                                                                echo ' selected';
+                                                            }
+                                                        }
+                                                    } 
+                                                    echo '>'.$row['Name'].'</option>';
+                                                }
+        
                                             ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="time" value="12:00:pm" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" name="startTime[]" id="startTime"
+                                              <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Lunch']['StartTime']. '"';
+                                                    }
+                                                } 
+                                            ?>          
+                                        >
                                     </div>
                                 </div>
 
@@ -304,21 +402,63 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="NoGuests[]" id="NoGuests">
+                                        <input class="form-control" type="number" name="NoGuests[]" id="NoGuests"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Afternoon Coffee Break']['NumberOfGuests']. '"';
+                                                    }
+                                                } 
+                                            ?>               
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
                                         <select class="form-control" name="RoomSetup[]" id="RoomSetup">
                                             <?php
-                                                    echo $selectSetup;                                            
-                                                ?>
+                                                $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+                                                $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                                
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<option value="'.$row['ID'].'"';
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        
+
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                            if ($_SESSION['events'][$str]['Afternoon Coffee Break']['setup'] == $row['ID']){
+                                                                echo ' selected';
+                                                            }
+                                                        }
+                                                    } 
+                                                    echo '>'.$row['Name'].'</option>';
+                                                }
+        
+                                            ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" name="startTime[]" id="startTime"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Afternoon Coffee Break']['StartTime']. '"';
+                                                    }
+                                                } 
+                                            ?>               
+                                        >
                                     </div>
                                 </div>
 
@@ -350,21 +490,63 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="NoGuests[]" id="NoGuests">
+                                        <input class="form-control" type="number" name="NoGuests[]" id="NoGuests"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Dinner']['NumberOfGuests']. '"';
+                                                    }
+                                                } 
+                                            ?>               
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
                                         <select class="form-control" name="RoomSetup[]" id="RoomSetup">
                                             <?php
-                                                echo $selectSetup;                                            
+                                                $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+                                                $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                                
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<option value="'.$row['ID'].'"';
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        
+
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                                            if ($_SESSION['events'][$str]['Dinner']['setup'] == $row['ID']){
+                                                                echo ' selected';
+                                                            }
+                                                        }
+                                                    } 
+                                                    echo '>'.$row['Name'].'</option>';
+                                                }
+        
                                             ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" name="startTime[]" id="startTime"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Dinner']['StartTime']. '"';
+                                                    }
+                                                } 
+                                            ?>               
+                                        >
                                     </div>
                                 </div>
 
@@ -396,21 +578,64 @@
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="number" value="" name="NoGuests[]" id="NoGuests">
+                                        <input class="form-control" type="number" name="NoGuests[]" id="NoGuests"
+                                            <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Other']['NumberOfGuests']. '"';
+                                                    }
+                                                } 
+                                            ?>         
+                                        >
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
                                         <select class="form-control" name="RoomSetup[]" id="RoomSetup">
                                             <?php
-                                                echo $selectSetup;                                            
+                                                $sql = "SELECT `ID`, `Name` FROM `roomsetup`";
+                                                $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                                
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    echo '<option value="'.$row['ID'].'"';
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        
+
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                            if ($_SESSION['events'][$str]['Other']['setup'] == $row['ID']){
+                                                                echo ' selected';
+                                                            }
+                                                        }
+                                                    } 
+                                                    echo '>'.$row['Name'].'</option>';
+                                                }
+        
                                             ?>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="form-group row EventInfo">
                                     <div class="col-md-12">
-                                        <input class="form-control" type="time" value="" name="startTime[]" id="startTime">
+                                        <input class="form-control" type="time" name="startTime[]" id="startTime"
+                                             <?php 
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                        echo 'value = "'. $_SESSION['events'][$str]['Other']['StartTime']. '"';
+                                                    }
+                                                } 
+                                            ?>                  
+                                               
+                                        >
                                     </div>
                                 </div>
 
@@ -460,7 +685,20 @@
                         <div class="modal-body ">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <textarea name="othermenu" id="othermenu" rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                    
+                                    <?php 
+                                        $menu = "";
+                                        if ($_SESSION['modify']=="1") { 
+                                            
+                                            
+                                            //var_dump($_SESSION['events'][$str]);
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                $menu = $_SESSION['events'][$str]['Other']['othercategoryoption'];
+                                            }
+                                        } 
+                                    ?>
+                                    
+                                    <textarea name="othermenu" id="othermenu" rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"><?php  echo $menu ?></textarea>
                                 </div>
                             </div>
                         </div>
@@ -490,7 +728,21 @@
 
                                                 echo '<div class="form-group row EventRooms">';
                                                 echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                                echo '  <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="'. $row['ID'] .'"></input>';
+                                                echo '  <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="'. $row['ID'] .'"';
+                                                
+                                                if ($_SESSION['modify']=="1") { 
+                                                        
+                                                    
+                                                    
+
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                        if ($_SESSION['events'][$str]['Breakfast']['CategoryOptions'] == $row['ID']){
+                                                            echo ' checked';
+                                                        }
+                                                    }
+                                                } 
+                                                    
+                                                echo '></input>';
                                                 echo '</div>';
 
                                                 $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
@@ -520,12 +772,39 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                            <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="0"></input>
+                                            <input class="col-md-2" id="radiobreakfast" type="radio" name="radiobreakfast" value="0"
+                                            <?php 
+                                              if ($_SESSION['modify']=="1") { 
+
+                                                
+                                                
+
+                                                if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                    if ($_SESSION['events'][$str]['Breakfast']['CategoryOptions'] == 0){
+                                                        echo ' checked';
+                                                    }
+                                                }
+                                            }      
+                                            ?>
+                                            ></input>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea name="otherbreakfast" id="otherbreakfast" rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                                
+                                                <?php 
+                                                    $menu = "";
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        //var_dump($_SESSION['events'][$str]);
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str]) && $_SESSION['events'][$str]['Breakfast']['CategoryOptions'] == 0) { 
+                                                            $menu = $_SESSION['events'][$str]['Breakfast']['othercategoryoption'];
+                                                        }
+                                                    } 
+                                                ?>
+                                                
+                                                <textarea name="otherbreakfast" id="otherbreakfast" rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"><?php  echo $menu ?></textarea>
                                             </div>
 
                                         </div>
@@ -558,7 +837,21 @@
 
                                                 echo '<div class="form-group row EventRooms">';
                                                 echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                                echo '  <input class="col-md-2" id="radiocoffee" type="radio" name="radiocoffee" value="'. $row['ID'] .'"></input>';
+                                                echo '  <input class="col-md-2" id="radiocoffee" type="radio" name="radiocoffee" value="'. $row['ID'] .'"';
+                                                
+                                                if ($_SESSION['modify']=="1") { 
+                                                        
+                                                    
+                                                    
+
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                        if ($_SESSION['events'][$str]['Morning Coffee Break']['CategoryOptions'] == $row['ID']){
+                                                            echo ' checked';
+                                                        }
+                                                    }
+                                                } 
+                                                
+                                                echo '></input>';
                                                 echo '</div>';
 
                                                 $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
@@ -588,12 +881,39 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                            <input class="col-md-2" id="radiocoffee" type="radio" name="radiocoffee" value="0"></input>
+                                            <input class="col-md-2" id="radiocoffee" type="radio" name="radiocoffee" value="0"
+                                            <?php 
+                                              if ($_SESSION['modify']=="1") { 
+
+                                                
+                                                
+
+                                                if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                    if ($_SESSION['events'][$str]['Morning Coffee Break']['CategoryOptions'] == 0){
+                                                        echo ' checked';
+                                                    }
+                                                }
+                                            }      
+                                            ?>       
+                                            ></input>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" name="othercoffee" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                                
+                                                <?php 
+                                                    $menu = "";
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        //var_dump($_SESSION['events'][$str]);
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str]) && $_SESSION['events'][$str]['Morning Coffee Break']['CategoryOptions'] == 0) { 
+                                                            $menu = $_SESSION['events'][$str]['Morning Coffee Break']['othercategoryoption'];
+                                                        }
+                                                    } 
+                                                ?>
+                                                
+                                                <textarea rows="5" name="othercoffee" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"><?php  echo $menu ?></textarea>
                                             </div>
 
                                         </div>
@@ -625,7 +945,21 @@
 
                                                 echo '<div class="form-group row EventRooms">';
                                                 echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                                echo '  <input class="col-md-2" id="radiolunch" type="radio" name="radiolunch" value="'. $row['ID'] .'"></input>';
+                                                echo '  <input class="col-md-2" id="radiolunch" type="radio" name="radiolunch" value="'. $row['ID'] .'"';
+                                                
+                                                if ($_SESSION['modify']=="1") { 
+                                                        
+                                                    
+                                                    
+
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                        if ($_SESSION['events'][$str]['Lunch']['CategoryOptions'] == $row['ID']){
+                                                            echo ' checked';
+                                                        }
+                                                    }
+                                                } 
+                                                
+                                                echo '></input>';
                                                 echo '</div>';
 
                                                 $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
@@ -655,12 +989,39 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                            <input class="col-md-2" id="radiolunch" type="radio" name="radiolunch" value="0"></input>
+                                            <input class="col-md-2" id="radiolunch" type="radio" name="radiolunch" value="0"
+                                            <?php 
+                                              if ($_SESSION['modify']=="1") { 
+
+                                                
+                                                
+
+                                                if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                    if ($_SESSION['events'][$str]['Lunch']['CategoryOptions'] == 0){
+                                                        echo ' checked';
+                                                    }
+                                                }
+                                            }      
+                                            ?>    
+                                            ></input>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea name="otherlunch" id=otherlunch rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                                
+                                                <?php 
+                                                    $menu = "";
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        //var_dump($_SESSION['events'][$str]);
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str]) && $_SESSION['events'][$str]['Lunch']['CategoryOptions'] == 0) { 
+                                                            $menu = $_SESSION['events'][$str]['Lunch']['othercategoryoption'];
+                                                        }
+                                                    } 
+                                                ?>
+                                                
+                                                <textarea name="otherlunch" id=otherlunch rows="5" cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"><?php  echo $menu ?></textarea>
                                             </div>
 
                                         </div>
@@ -686,52 +1047,93 @@
                                 <div class="row" id="tableClothPackages">
                                     <?php
 
-                                            $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 6"; // afternoon coffee id = 6
-                                            $result = mysqli_query($conn, $sql) or die(mysql_error());
+                                        $sql = "SELECT `ID`, `Name`  FROM `categoryoptions` WHERE `IDMenuCategory` = 6"; // afternoon coffee id = 6
+                                        $result = mysqli_query($conn, $sql) or die(mysql_error());
 
-                                            while ($row = mysqli_fetch_assoc($result)) {
+                                        while ($row = mysqli_fetch_assoc($result)) {
 
-                                                echo '<div class="form-group row EventRooms">';
-                                                echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                                echo '  <input class="col-md-2" id="radioafternooncoffee" type="radio" name="radioafternooncoffee" value="'. $row['ID'] .'"></input>';
-                                                echo '</div>';
+                                            echo '<div class="form-group row EventRooms">';
+                                            echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
+                                            echo '  <input class="col-md-2" id="radioafternooncoffee" type="radio" name="radioafternooncoffee" value="'. $row['ID'] .'"';
+                                            
+                                            if ($_SESSION['modify']=="1") { 
+                                                        
+                                                
+                                                
 
-                                                $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
-
-                                                $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
-
-                                                $i = 0;
-
-                                                echo '<div class="form-group row EventRooms">';
-                                                while ($row2 = mysqli_fetch_assoc($result2)) {
-
-                                                    echo '  <div class="col-md-4">';
-                                                    echo '      <p>- '. $row2['Name'] .'</p>';
-                                                    echo '  </div>';
-
-                                                    $i = $i + 1;
-
-                                                    if ($i % 3 == 0) {
-                                                        echo "</div>";
-                                                        echo '<div class="form-group row EventRooms">';
+                                                if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                    if ($_SESSION['events'][$str]['Afternoon Coffee Break']['CategoryOptions'] == $row['ID']){
+                                                        echo ' checked';
                                                     }
                                                 }
-                                                echo '</div>';
-                                            }
+                                            } 
+                                            
+                                            echo '></input>';
+                                            echo '</div>';
 
-                                        ?>
+                                            $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
+
+                                            $result2 = mysqli_query($conn, $sql2) or die(mysql_error());
+
+                                            $i = 0;
+
+                                            echo '<div class="form-group row EventRooms">';
+                                            while ($row2 = mysqli_fetch_assoc($result2)) {
+
+                                                echo '  <div class="col-md-4">';
+                                                echo '      <p>- '. $row2['Name'] .'</p>';
+                                                echo '  </div>';
+
+                                                $i = $i + 1;
+
+                                                if ($i % 3 == 0) {
+                                                    echo "</div>";
+                                                    echo '<div class="form-group row EventRooms">';
+                                                }
+                                            }
+                                            echo '</div>';
+                                        }
+
+                                    ?>
 
 
                                         <!-- This is repeated by the amount of amenities there are  -->
 
                                         <div class="form-group row">
                                             <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                            <input class="col-md-2" id="radioafternooncoffee" type="radio" name="radioafternooncoffee" value="0"></input>
+                                            <input class="col-md-2" id="radioafternooncoffee" type="radio" name="radioafternooncoffee" value="0"
+                                            <?php 
+                                              if ($_SESSION['modify']=="1") { 
+
+                                                
+                                                
+
+                                                if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                    if ($_SESSION['events'][$str]['Afternoon Coffee Break']['CategoryOptions'] == 0){
+                                                        echo ' checked';
+                                                    }
+                                                }
+                                            }      
+                                            ?>       
+                                            ></input>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" name="otherafternooncoffee" id="otherafternooncoffee"cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                                
+                                                <?php 
+                                                    $menu = "";
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        //var_dump($_SESSION['events'][$str]);
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str]) && $_SESSION['events'][$str]['Afternoon Coffee Break']['CategoryOptions'] == 0) { 
+                                                            $menu = $_SESSION['events'][$str]['Afternoon Coffee Break']['othercategoryoption'];
+                                                        }
+                                                    } 
+                                                ?>
+                                                
+                                                <textarea rows="5" name="otherafternooncoffee" id="otherafternooncoffee"cols="50" placeholder="Our kitchen staff will gladly help you with any special menu you desire"><?php echo $menu ?></textarea>
                                             </div>
 
                                         </div>
@@ -764,7 +1166,19 @@
 
                                                 echo '<div class="form-group row EventRooms">';
                                                 echo '  <label class="col-md-4 col-form-label PackageLabel">'. $row['Name'] .'</label>';
-                                                echo '  <input class="col-md-2" id="radiodinner" type="radio" name="radiodinner" value="'. $row['ID'] .'"></input>';
+                                                echo '  <input class="col-md-2" id="radiodinner" type="radio" name="radiodinner" value="'. $row['ID'] .'"';
+                                                if ($_SESSION['modify']=="1") { 
+                                                        
+                                                    
+                                                    
+
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                                        if ($_SESSION['events'][$str]['Dinner']['CategoryOptions'] == $row['ID']){
+                                                            echo ' checked';
+                                                        }
+                                                    }
+                                                } 
+                                                echo '></input>';
                                                 echo '</div>';
 
                                                 $sql2 = "SELECT `Name` FROM `plates` WHERE `IDCategoryOptions` = ". $row['ID'];
@@ -797,12 +1211,39 @@
 
                                         <div class="form-group row">
                                             <label class="col-md-4 col-form-label PackageLabel">Other</label>
-                                            <input class="col-md-2" id="radiodinner" type="radio" name="radiodinner" value="0"></input>
+                                            <input class="col-md-2" id="radiodinner" type="radio" name="radiodinner" value="0"
+                                            <?php 
+                                              if ($_SESSION['modify']=="1") { 
+
+                                                
+                                                
+
+                                                if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                    if ($_SESSION['events'][$str]['Dinner']['CategoryOptions'] == 0){
+                                                        echo ' checked';
+                                                    }
+                                                }
+                                            }      
+                                            ?>       
+                                            ></input>
                                         </div>
 
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" cols="50" name="otherdinner" id="otherdinner" placeholder="Our kitchen staff will gladly help you with any special menu you desire"></textarea>
+                                                
+                                                <?php 
+                                                    $menu = "";
+                                                    if ($_SESSION['modify']=="1") { 
+                                                        
+                                                        
+                                                        //var_dump($_SESSION['events'][$str]);
+                                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str]) && $_SESSION['events'][$str]['Dinner']['CategoryOptions'] == 0) { 
+                                                            $menu = $_SESSION['events'][$str]['Dinner']['othercategoryoption'];
+                                                        }
+                                                    } 
+                                                ?>
+                                                
+                                                <textarea rows="5" cols="50" name="otherdinner" id="otherdinner" placeholder="Our kitchen staff will gladly help you with any special menu you desire"><?php  echo $menu ?></textarea>
                                             </div>
 
                                         </div>
@@ -835,8 +1276,52 @@
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                        $options = str_replace("&", "1", $avAidsOptions);
-                                        echo $options;
+                                    echo '<div class="form-group row EventRooms">';
+                                    
+                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                    $i = 0;
+                                    $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+
+                                        echo '<div class="col-md-4 AvAidOptions">';
+                                        echo '  <p>'. $row['Name'] .'</p>';
+                                        echo '</div>';
+                                        echo '<div class="col-md-1">';
+                                        echo '  <input type="checkbox" name="avAid1[]" value="'. $row['ID'] .'"';
+                                        
+                                        if ($_SESSION['modify']=="1") { 
+                                                        
+                                            
+                                            
+
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                
+                                                if (in_array($row['ID'], $_SESSION['events'][$str]['Breakfast']['AvAids'])){
+                                                    echo ' checked';
+                                                }
+
+                                            }
+                                        } 
+                                        
+                                            
+                                        echo '></input>';
+                                        echo '</div>';
+
+                                        $i = $i + 1;
+                                        if ($i % 2 == 0){
+                                            echo "</div>";
+                                            echo '<div class="form-group row EventRooms">';
+                                        }
+
+                                    }
+
+                                    echo "</div>";
+                                ?>
+                                    
+                                    <?php
+                                        //$options = str_replace("&", "1", $avAidsOptions);
+                                        //echo $options;
                                     ?>
 
                                     <div class="form-group row">
@@ -845,7 +1330,20 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the AvAids needed...."></textarea>
+                                            
+                                            <?php 
+                                                $avAid = "";
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                                        $avAid = $_SESSION['events'][$str]['Breakfast']['OtherAvAids'];
+                                                    }
+                                                } 
+                                            ?>
+                                            
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."><?php echo $avAid ?></textarea>
                                         </div>
                                     </div>
 
@@ -875,9 +1373,52 @@
 
                                 <div class="row" id="tableClothPackages">
 
+                                <?php
+                                    echo '<div class="form-group row EventRooms">';
+                                    
+                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                    $i = 0;
+                                    $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+
+                                        echo '<div class="col-md-4 AvAidOptions">';
+                                        echo '  <p>'. $row['Name'] .'</p>';
+                                        echo '</div>';
+                                        echo '<div class="col-md-1">';
+                                        echo '  <input type="checkbox" name="avAid2[]" value="'. $row['ID'] .'"';
+                                        
+                                        if ($_SESSION['modify']=="1") { 
+                                                        
+                                            
+                                            
+
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                
+                                                if (in_array($row['ID'], $_SESSION['events'][$str]['Morning Coffee Break']['AvAids'])){
+                                                    echo ' checked';
+                                                }
+
+                                            }
+                                        } 
+                                        
+                                            
+                                        echo '></input>';
+                                        echo '</div>';
+
+                                        $i = $i + 1;
+                                        if ($i % 2 == 0){
+                                            echo "</div>";
+                                            echo '<div class="form-group row EventRooms">';
+                                        }
+
+                                    }
+
+                                    echo "</div>";
+                                ?>
                                     <?php
-                                        $options = str_replace("&", "2", $avAidsOptions);
-                                        echo $options;
+                                        //$options = str_replace("&", "2", $avAidsOptions);
+                                        //echo $options;
                                     ?>
 
                                         <div class="form-group row">
@@ -885,9 +1426,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
+                                            <?php 
+                                                $avAid = "";
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                                        $avAid = $_SESSION['events'][$str]['Morning Coffee Break']['OtherAvAids'];
+                                                    }
+                                                } 
+                                            ?>
+                                            
+                                            
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."><?php echo $avAid ?></textarea>
                                         </div>
 
                                 </div>
@@ -914,18 +1466,75 @@
                                 </div>
                                 <div class="row" id="tableClothPackages">
 
+                                    
                                     <?php
-                                        $options = str_replace("&", "3", $avAidsOptions);
-                                        echo $options;
+                                    echo '<div class="form-group row EventRooms">';
+                                    
+                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                    $i = 0;
+                                    $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+
+                                        echo '<div class="col-md-4 AvAidOptions">';
+                                        echo '  <p>'. $row['Name'] .'</p>';
+                                        echo '</div>';
+                                        echo '<div class="col-md-1">';
+                                        echo '  <input type="checkbox" name="avAid3[]" value="'. $row['ID'] .'"';
+                                        
+                                        if ($_SESSION['modify']=="1") { 
+                                                        
+                                            
+                                            
+
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                
+                                                if (in_array($row['ID'], $_SESSION['events'][$str]['Lunch']['AvAids'])){
+                                                    echo ' checked';
+                                                }
+
+                                            }
+                                        } 
+                                        
+                                            
+                                        echo '></input>';
+                                        echo '</div>';
+
+                                        $i = $i + 1;
+                                        if ($i % 2 == 0){
+                                            echo "</div>";
+                                            echo '<div class="form-group row EventRooms">';
+                                        }
+
+                                    }
+
+                                    echo "</div>";
+                                ?>
+                                    
+                                    <?php
+                                        //$options = str_replace("&", "3", $avAidsOptions);
+                                        //echo $options;
                                     ?>
 
                                         <div class="form-group row">
                                             <label class="col-md-2 col-form-label PackageLabel">Other</label>
                                         </div>
 
+                                        <?php 
+                                                $avAid = "";
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                                        $avAid = $_SESSION['events'][$str]['Lunch']['OtherAvAids'];
+                                                    }
+                                                } 
+                                            ?>
+                                    
                                         <div class="row">
                                             <div class="col-md-6">
-                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
+                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."><?php echo $avAid ?></textarea>
                                             </div>
                                         </div>
                                 </div>
@@ -955,9 +1564,54 @@
 
                                 <div class="row" id="tableClothPackages">
 
+                                    
                                     <?php
-                                        $options = str_replace("&", "4", $avAidsOptions);
-                                        echo $options;
+                                    echo '<div class="form-group row EventRooms">';
+                                    
+                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                    $i = 0;
+                                    $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+
+                                        echo '<div class="col-md-4 AvAidOptions">';
+                                        echo '  <p>'. $row['Name'] .'</p>';
+                                        echo '</div>';
+                                        echo '<div class="col-md-1">';
+                                        echo '  <input type="checkbox" name="avAid4[]" value="'. $row['ID'] .'"';
+                                        
+                                        if ($_SESSION['modify']=="1") { 
+                                                        
+                                            
+                                            
+
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                
+                                                if (in_array($row['ID'], $_SESSION['events'][$str]['Afternoon Coffee Break']['AvAids'])){
+                                                    echo ' checked';
+                                                }
+
+                                            }
+                                        } 
+                                        
+                                            
+                                        echo '></input>';
+                                        echo '</div>';
+
+                                        $i = $i + 1;
+                                        if ($i % 2 == 0){
+                                            echo "</div>";
+                                            echo '<div class="form-group row EventRooms">';
+                                        }
+
+                                    }
+
+                                    echo "</div>";
+                                ?>
+                                    
+                                    <?php
+                                        //$options = str_replace("&", "4", $avAidsOptions);
+//                                        /echo $options;
                                     ?>
 
                                         <div class="form-group row">
@@ -965,9 +1619,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
+                                            
+                                            <?php 
+                                                $avAid = "";
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                                        $avAid = $_SESSION['events'][$str]['Afternoon Coffee Break']['OtherAvAids'];
+                                                    }
+                                                } 
+                                            ?>
+                                            
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."><?php echo $avAid ?></textarea>
                                         </div>
 
                                 </div>
@@ -997,8 +1662,52 @@
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                        $options = str_replace("&", "5", $avAidsOptions);
-                                        echo $options;
+                                    echo '<div class="form-group row EventRooms">';
+                                    
+                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                    $i = 0;
+                                    $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+
+                                        echo '<div class="col-md-4 AvAidOptions">';
+                                        echo '  <p>'. $row['Name'] .'</p>';
+                                        echo '</div>';
+                                        echo '<div class="col-md-1">';
+                                        echo '  <input type="checkbox" name="avAid5[]" value="'. $row['ID'] .'"';
+                                        
+                                        if ($_SESSION['modify']=="1") { 
+                                                        
+                                            
+                                            
+
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                                
+                                                if (in_array($row['ID'], $_SESSION['events'][$str]['Dinner']['AvAids'])){
+                                                    echo ' checked';
+                                                }
+
+                                            }
+                                        } 
+                                        
+                                            
+                                        echo '></input>';
+                                        echo '</div>';
+
+                                        $i = $i + 1;
+                                        if ($i % 2 == 0){
+                                            echo "</div>";
+                                            echo '<div class="form-group row EventRooms">';
+                                        }
+
+                                    }
+
+                                    echo "</div>";
+                                ?>
+                                    
+                                    <?php
+                                        //$options = str_replace("&", "5", $avAidsOptions);
+                                        //echo $options;
                                     ?>
 
                                         <div class="form-group row">
@@ -1006,9 +1715,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
+                                            
+                                            <?php 
+                                                $avAid = "";
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                                        $avAid = $_SESSION['events'][$str]['Dinner']['OtherAvAids'];
+                                                    }
+                                                } 
+                                            ?>
+                                            
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."><?php echo $avAid ?></textarea>
                                         </div>
 
                                 </div>
@@ -1040,8 +1760,52 @@
                                 <div class="row" id="tableClothPackages">
 
                                     <?php
-                                        $options = str_replace("&", "6", $avAidsOptions);
-                                        echo $options;
+                                    echo '<div class="form-group row EventRooms">';
+                                    
+                                    $sql = "SELECT `ID`, `Name` FROM `avaids`";
+                                    $i = 0;
+                                    $result = mysqli_query($conn, $sql) or die(mysql_error());
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+
+                                        echo '<div class="col-md-4 AvAidOptions">';
+                                        echo '  <p>'. $row['Name'] .'</p>';
+                                        echo '</div>';
+                                        echo '<div class="col-md-1">';
+                                        echo '  <input type="checkbox" name="avAid6[]" value="'. $row['ID'] .'"';
+                                        
+                                        if ($_SESSION['modify']=="1") { 
+                                                        
+                                            
+                                            
+
+                                            if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                
+                                                if (in_array($row['ID'], $_SESSION['events'][$str]['Other']['AvAids'])){
+                                                    echo ' checked';
+                                                }
+
+                                            }
+                                        } 
+                                        
+                                            
+                                        echo '></input>';
+                                        echo '</div>';
+
+                                        $i = $i + 1;
+                                        if ($i % 2 == 0){
+                                            echo "</div>";
+                                            echo '<div class="form-group row EventRooms">';
+                                        }
+
+                                    }
+
+                                    echo "</div>";
+                                ?>
+                                    
+                                    <?php
+                                        //$options = str_replace("&", "6", $avAidsOptions);
+                                        //echo $options;
                                     ?>
 
                                         <div class="form-group row">
@@ -1049,9 +1813,20 @@
                                         </div>
 
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."></textarea>
-                                            </div>
+                                            
+                                            <?php 
+                                                $avAid = "";
+                                                if ($_SESSION['modify']=="1") { 
+                                                    
+                                                    
+                                                    //var_dump($_SESSION['events'][$str]);
+                                                    if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                                        $avAid = $_SESSION['events'][$str]['Other']['OtherAvAids'];
+                                                    }
+                                                } 
+                                            ?>
+                                            
+                                            <textarea rows="5" cols="50" name="otheravaids[]" placeholder="Describe the menu needed...."><?php echo $avAid ?></textarea>
                                         </div>
                                 </div>
                             </div>
@@ -1078,7 +1853,19 @@
 
                                 <!-- This is repeated by the amount of amenities there are -->
 
-                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                                <?php 
+                                    $amenitie = "";
+                                    if ($_SESSION['modify']=="1") { 
+                                        
+                                        
+                                        //var_dump($_SESSION['events'][$str]);
+                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Breakfast", $_SESSION['events'][$str])) { 
+                                            $amenitie = $_SESSION['events'][$str]['Breakfast']['OtherAmenities'];
+                                        }
+                                    } 
+                                ?>
+                                
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"><?php echo $amenitie ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -1103,7 +1890,19 @@
 
                                 <!-- This is repeated by the amount of amenities there are -->
 
-                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                                <?php 
+                                    $amenitie = "";
+                                    if ($_SESSION['modify']=="1") { 
+                                        
+                                        
+                                        //var_dump($_SESSION['events'][$str]);
+                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Morning Coffee Break", $_SESSION['events'][$str])) { 
+                                            $amenitie = $_SESSION['events'][$str]['Morning Coffee Break']['OtherAmenities'];
+                                        }
+                                    } 
+                                ?>
+                                
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"><?php echo $amenitie ?></textarea>
 
                             </div>
                         </div>
@@ -1129,7 +1928,19 @@
 
                                 <!-- This is repeated by the amount of amenities there are -->
 
-                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                                <?php 
+                                    $amenitie = "";
+                                    if ($_SESSION['modify']=="1") { 
+                                        
+                                        
+                                        //var_dump($_SESSION['events'][$str]);
+                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Lunch", $_SESSION['events'][$str])) { 
+                                            $amenitie = $_SESSION['events'][$str]['Lunch']['OtherAmenities'];
+                                        }
+                                    } 
+                                ?>
+                                
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"><?php echo $amenitie ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -1152,7 +1963,19 @@
                                     </div>
                                 </div>
 
-                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                                
+                                <?php 
+                                    $amenitie = "";
+                                    if ($_SESSION['modify']=="1") { 
+                                        
+                                        
+                                        //var_dump($_SESSION['events'][$str]);
+                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Afternoon Coffee Break", $_SESSION['events'][$str])) { 
+                                            $amenitie = $_SESSION['events'][$str]['Afternoon Coffee Break']['OtherAmenities'];
+                                        }
+                                    } 
+                                ?>
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"><?php echo $amenitie ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -1177,7 +2000,19 @@
 
                                 <!-- This is repeated by the amount of amenities there are -->
 
-                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                                <?php 
+                                    $amenitie = "";
+                                    if ($_SESSION['modify']=="1") { 
+                                        
+                                        
+                                        //var_dump($_SESSION['events'][$str]);
+                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Dinner", $_SESSION['events'][$str])) { 
+                                            $amenitie = $_SESSION['events'][$str]['Dinner']['OtherAmenities'];
+                                        }
+                                    } 
+                                ?>
+                                
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"><?php echo $amenitie ?></textarea>
                             </div>
                         </div>
                     </div>
@@ -1199,8 +2034,20 @@
                                         <h1 class="question">Additional Needs</h1>
                                     </div>
                                 </div>
+                                
+                                <?php 
+                                    $amenitie = "";
+                                    if ($_SESSION['modify']=="1") { 
+                                        
+                                        
+                                        //var_dump($_SESSION['events'][$str]);
+                                        if (array_key_exists($str, $_SESSION['events']) && array_key_exists("Other", $_SESSION['events'][$str])) { 
+                                            $amenitie = $_SESSION['events'][$str]['Other']['OtherAmenities'];
+                                        }
+                                    } 
+                                ?>
 
-                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+                                <textarea name="amenities[]" rows="10" cols="60" placeholder="Tell us more about your needs i.e. specific tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"><?php echo $amenitie ?></textarea>
                             </div>
                         </div>
                     </div>

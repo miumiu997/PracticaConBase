@@ -333,18 +333,26 @@
                         if( $("#createRoomName").val() != ""){   
                             //alert("name is filled in"); 
  
+                            var data = new FormData();
+                            $.each($('#logo')[0].files, function(i, file) {
+                                data.append("image", file);
+                            });
+                            
+                            data.append("name", $("#createRoomName").val());
+                            data.append("surface", $("#createRoomSurface").val());
+                            data.append("height", $("#createRoomHeight").val());
+                            data.append("description", $("#createDescription").val());
+                            data.append("price", $("#createRoomPrice").val());
+                            
+                            
                             //creates event 
                              $.ajax({
                                 method: 'POST',
                                 url: 'ajaxCreateEventRoom.php',
-                                data: { 
-                                    name: $("#createRoomName").val(),  
-                                    surface: $("#createRoomSurface").val(), 
-                                    height: $("#createRoomHeight").val(), 
-                                    description: $("#createDescription").val(), 
-                                    price: $("#createRoomPrice").val()
-
-                                },
+                                data: data,
+                                cache: false,
+                                contentType: false,
+                                processData: false,
                                 success: function(data){   
 
                                     if (data != "-1"){    

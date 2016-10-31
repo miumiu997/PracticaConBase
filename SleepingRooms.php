@@ -46,6 +46,8 @@
             );
             
     $_SESSION['day'. $_POST['days2']] = $array;
+    
+    //var_dump($_SESSION);
     //echo "<h1>" . $_POST['days2'] . "</h1>";
 ?>
 
@@ -135,23 +137,64 @@
 
                                     for ($i = 1; $i <= $diff->d + 1; $i++){
 
-                                        echo "<div class='form-group row inputRooms'>
-                                                <h1 class='RoomDates'>Day ". $i . "</h1>
-                                            </div>";
-                                        echo "<div class='form-group row inputRooms'>
-                                                <label for='single' class='col-md-1 col-form-label'>Single: </label>
-                                                <div class='col-md-3'>
-                                                    <input class='form-control' type='number' value='' id='single' name='single[]'>
-                                                </div>
-                                                <label for='double' class='col-md-1 col-form-label'>Double: </label>
-                                                <div class='col-md-3'>
-                                                    <input class='form-control' type='number' value='' id='double' name='double[]'>
-                                                </div>
-                                                <label for='suite' class='col-md-1 col-form-label'>Suite: </label>
-                                                <div class='col-md-3'>
-                                                    <input class='form-control' type='number' value='' id='suite' name='suite[]'>
-                                                </div>
-                                            </div>";
+                                        echo "<div class='form-group row inputRooms'>";
+                                        echo "  <h1 class='RoomDates'>Day ". $i . "</h1>";
+                                        echo "</div>";
+                                        
+                                        echo "<div class='form-group row inputRooms'>";
+                                        
+                                        echo "  <label for='single' class='col-md-1 col-form-label'>Single: </label>";
+                                        echo "  <div class='col-md-3'>";
+                                        echo "      <input class='form-control' type='number' id='single' name='single[]' ";
+                                        
+                                        if ($_SESSION['modify'] == 1){
+                                            if ($i - 1 < count($_SESSION['singles'])){
+                                                
+                                                if ($_SESSION['singles'][$i-1] != "NULL") {
+                                                    echo "value = ". $_SESSION['singles'][$i-1];
+                                                }
+                                            }
+                                        }
+                                        
+                                        echo ">";
+                                        echo "  </div>";
+                                        
+                                        
+                                        echo "  <label for='double' class='col-md-1 col-form-label'>Double: </label>";
+                                        echo "  <div class='col-md-3'>";
+                                        echo "      <input class='form-control' type='number' id='double' name='double[]' ";
+                                        
+                                        if ($_SESSION['modify'] == 1){
+                                            if ($i - 1 < count($_SESSION['singles'])){
+                                                
+                                                if ($_SESSION['doubles'][$i-1] != "NULL") {
+                                                    echo "value = ". $_SESSION['doubles'][$i-1];
+                                                }
+                                            }
+                                        }
+                                        
+                                        echo ">";
+                                        echo "  </div>";
+                                        
+                                        
+                                        
+                                        echo "  <label for='suite' class='col-md-1 col-form-label'>Suite: </label>";
+                                        echo "  <div class='col-md-3'>";
+                                        echo "      <input class='form-control' type='number' id='suite' name='suite[]' "; 
+                                        
+                                        if ($_SESSION['modify'] == 1){
+                                            if ($i - 1 < count($_SESSION['suites'])){
+                                                
+                                                if ($_SESSION['suites'][$i-1] != "NULL") {
+                                                    echo "value = ". $_SESSION['suites'][$i-1];
+                                                }
+                                            }
+                                        }
+                                        
+                                        echo ">";
+                                        echo "  </div>";
+                                        
+                                        echo "</div>";
 
                                     }
                                 ?>

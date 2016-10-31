@@ -8,24 +8,58 @@
 
     $img = addslashes($_SESSION['imgData']);
 
-    // Guarda en la tabla de Request la información relacionada con el nuevo evento.
-    $sql = "INSERT INTO `request`(`Name`, `LastName`, `Cellphone`, `Email`, `StartDate`, `EndDate`, `Company`, `TypeOfEvent`, `Posted`, `Logo`, `EventName`, `Reason`, `Seen`, `Date`) VALUES ('". $_SESSION['first-name'] . "', '".  $_SESSION['last-name'] ."', '". $_SESSION['telephone'] ."', '". $_SESSION['email'] ."' , '". $_SESSION['start-date'] ."', '". $_SESSION['end-date'] ."', '". $_SESSION['company'] ."', ". $_SESSION['typeOfEvent'] .", ". $_SESSION['publish']. ", '{$img}', '". $_SESSION['event-name'] ."', '". $_SESSION['reason'] ."', 0, NOW())";
 
-    $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+    if($_SESSION['modify'] != "1") {
+        // Guarda en la tabla de Request la información relacionada con el nuevo evento.
+        $sql = "INSERT INTO `request`(`Name`, `LastName`, `Cellphone`, `Email`, `StartDate`, `EndDate`, `Company`, `TypeOfEvent`, `Posted`, `Logo`, `EventName`, `Reason`, `Seen`, `Date`) VALUES ('". $_SESSION['first-name'] . "', '".  $_SESSION['last-name'] ."', '". $_SESSION['telephone'] ."', '". $_SESSION['email'] ."' , '". $_SESSION['start-date'] ."', '". $_SESSION['end-date'] ."', '". $_SESSION['company'] ."', ". $_SESSION['typeOfEvent'] .", ". $_SESSION['publish']. ", '{$img}', '". $_SESSION['event-name'] ."', '". $_SESSION['reason'] ."', 0, NOW())";
 
-    $requestNumber = mysqli_insert_id($conn);
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+
+        $requestNumber = mysqli_insert_id($conn);
+    
+    } else {
+        
+        $requestNumber = $_SESSION['request'];
+        
+        $sql = "UPDATE `request` SET `Name`='". $_SESSION['first-name'] ."',`LastName`='". $_SESSION['last-name'] ."',`Cellphone`='". $_SESSION['telephone'] ."',`Email`='". $_SESSION['email'] ."',`Date`= NOW(),`StartDate`='". $_SESSION['start-date'] ."',`EndDate`='". $_SESSION['end-date'] ."',`Company`='" . $_SESSION['company'] . "',`TypeOfEvent`=". $_SESSION['typeOfEvent'] .",`Posted`=". $_SESSION['publish'] .",`Logo`='{$img}',`EventName`='". $_SESSION['event-name'] ."',`Reason`='". $_SESSION['reason'] ."' WHERE `RequestNumber` = ". $requestNumber;
+        
+//        /echo $sql;
+        
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+        
+        $sql = "DELETE FROM `roomsxdate` WHERE  `RequestNumber` = ". $requestNumber;
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+        
+        $sql = "DELETE FROM `Comment` WHERE  `RequestNumber` = ". $requestNumber;
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+        
+        $sql = "SELECT `ID` FROM `event` WHERE `RequestNumber` = ". $requestNumber;
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+        
+        $sql2 = "DELETE FROM `avaidsxevent` WHERE `EventID` = ";
+        while($row = mysqli_fetch_assoc($result)) {
+            $result2 = mysqli_query($conn, $sql2.$row['ID']) or die(mysqli_error($conn));
+        }
+        
+        $sql = "DELETE FROM `event` WHERE `RequestNumber` = ". $requestNumber;
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+        
+    }
+    
     
     foreach ($_SESSION['comments'] as $comment){
         $sql2 = "INSERT INTO `comment` (`requestnumber`, `comment`) VALUES (".$requestNumber .", '". $comment ."')";
         $result2 = mysqli_query($conn, $sql2) or die(mysqli_error($conn));  
     }
+
+//    /var_dump($_SESSION);
                         
     $i = 1;
+    $date = new Datetime($_SESSION['start-date']);
 
     for ($i = 1; $i <= $_SESSION['days']; $i += 1) {
         $array =  $_SESSION['day'. $i];
         //var_dump($array);
-        $date = new Datetime($_SESSION['start-date']);
         if($i > 1){
           $date->modify('+1 day');  
         }
@@ -219,7 +253,7 @@
                 // insertar avaids
                 while ($j < count($array["avAid6"])) {
 
-                    $values = "(". $eventid .", ". $array["avAid5"][$j] .")";
+                    $values = "(". $eventid .", ". $array["avAid6"][$j] .")";
                     //echo "</br>". $sqlavaid.$values ."</br>";
                     $resultAvaid = mysqli_query($conn, $sqlavaid.$values) or die(mysqli_error($conn));
 
@@ -232,6 +266,8 @@
     if($_SESSION['imgName'] != "") {
         unlink($_SESSION['imgName']);
     }
+
+    session_unset();
 
     echo $requestNumber;
 ?>

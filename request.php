@@ -86,7 +86,9 @@
 
                     while ($row = mysqli_fetch_assoc($result)) {
                         // echo de los resultados   
-                        echo '<tr>';
+                        
+                        
+                        echo '<tr class="clickable-row" data-href="adminSummary.php?request='. $row['RequestNumber'] .'">';
                         echo '  <td>';
 
                         if($row['Seen'] == 0){
@@ -97,6 +99,7 @@
                         echo '  <td>' . $row['RequestNumber'] .'</td>';
                         echo '  <td>'. $row['Date'] .'</td>';
                         echo '</tr>';
+                        
                     }
                 ?>
             </table>
@@ -123,6 +126,10 @@
                         $('#table').append(data);
                     }
                 });
+            });
+            
+            $(".clickable-row").click(function() {
+                window.document.location = $(this).data("href");
             });
         });
     </script>

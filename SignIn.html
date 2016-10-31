@@ -84,6 +84,7 @@
             </div>
             
             <form method="get" action="request.php" id="form" name="form"></form>
+            <form method="get" action="EventPlanner.html" id="form2" name="form2"></form>
             
             <div class="row bottomReward">
                 <a href="http://www.marriott.com/rewards/rewards-program.mi"><img class="RewardsLogo" src="logos/Rewards.png"></a>  
@@ -114,13 +115,17 @@
                     },
                     success: function(data){
                         //alert(data);
-                        if (data == "1" || data == "0"){
-                            $('#form').submit();
-                        } else{
-                            if (data == "-1"){
-                                alert("Invalid username or password");
+                        if (data == "1") {
+                            $('#form2').submit();
+                        } else {
+                            if (data == "0"){
+                                $('#form').submit();
                             } else {
-                                alert("An error has occurred, please try again later");
+                                if (data == "-1"){
+                                    alert("Invalid username or password");
+                                } else {
+                                    alert("An error has occurred, please try again later");
+                                }
                             }
                         }
                     }

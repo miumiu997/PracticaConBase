@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <?php 
-        session_start();
-        $_SESSION['singles'] = $_POST['single'];
-        $_SESSION['doubles'] = $_POST['double'];
-        $_SESSION['suites'] = $_POST['suite'];
-    ?>
-    
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -48,7 +42,7 @@
                 <ul class="nav navbar-nav">
                     <!-- This title has to be changed according to the menu category selected-->
                     <li>
-                        <H1 class="NavEventPlanner"> Comments or Questions </H1>
+                        <H1 class="NavEventPlanner"> AV Aids </H1>
                     </li>
 
                 </ul>
@@ -62,44 +56,74 @@
 
         <div class="container">
             <div class="row">
+                <div class="row">
+                    <div class="row questionDiv">
+                        <h1 class="question">We are always prepared to fulfill your needs to assure the success of your event </h1>
+                    </div>
+                </div>
                 <!-- This is repeated by the amount of category options there are -->
 
-                <div class="row questionDiv">
-                    <h1 class="question">Is there anything else we can do for you ? </h1>
-                </div>
+                <form method="get" action="SleepingRooms.html">
+                    <div class="row" id="tableClothPackages">
 
-                <form method="get" action="Summary.php">
-                    <div>
-                        
-                        <?php 
-                        
-                            if ($_SESSION['modify'] != "1"){
-                                echo '<div class="input_fields_wrap">';
-                                echo '  <div>';
-                                echo '      <input type="text" name="mytext[]" class="CommentInput" />';
-                                echo '      <a href="#" class="remove_field RemoveBtn">Remove</a>';
-                                echo '  </div>';
-                                echo '</div>';
-                            } else {
-                                
-                                for ($i = 0; $i < count($_SESSION['comments']); $i += 1){
-                                    
-                                    echo '<div class="input_fields_wrap">';
-                                    echo '  <div>';
-                                    echo '      <input type="text" name="mytext[]" class="CommentInput" value="'. $_SESSION['comments'][$i] .'" />';
-                                    echo '      <a href="#" class="remove_field RemoveBtn">Remove</a>';
-                                    echo '  </div>';
-                                    echo '</div>';
-                                    
-                                }
-                                
-                            }
-                        
-                        ?>
-                        
-                        <button class="add_field_button AddBtn">Click here to add another requirement, comment or question. </button>
+                        <div class="form-group row EventRooms">
+                            <div class="col-md-4 AvAidOptions">
+                                <p>DVD Player/CD Player </p>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
+                            </div>
+                            <div class="col-md-4 AvAidOptions">
+                                <p>Projector</p>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
+                            </div>
+                        </div>
+                        <div class="form-group row EventRooms">
+                            <div class="col-md-4 AvAidOptions">
+                                <p>Screen Projector</p>
+                            </div>
+                            <div class="col-md-1">
+                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
+                            </div>
+                            <div class="col-md-4 AvAidOptions">
+                                <p>Acrylic Board</p>
+                            </div>
+                            <div class="col-md-1 AvAidOptions">
+                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
+                            </div>
+                        </div>
+                        <div class="form-group row EventRooms">
+                            <div class="col-md-4 AvAidOptions">
+                                <p>Conference Telephone</p>
+                            </div>
+                            <div class="col-md-1 AvAidOptions">
+                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
+                            </div>
+                            <div class="col-md-4 AvAidOptions">
+                                <p>Laser Pointer</p>
+                            </div>
+                            <div class="col-md-1 AvAidOptions">
+                                <input type="checkbox" name="vehicle2" value="EventRoomID"></input>
+                            </div>
+                        </div>
+
+
+                        <!-- This is repeated by the amount of amenities there are  -->
+
+                        <div class="form-group row">
+                            <label class="col-md-2 col-form-label PackageLabel">Other</label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <textarea rows="5" cols="50" placeholder="Describe the menu needed...."></textarea>
+                            </div>
+                        </div>
 
                     </div>
+
 
                     <div class="form-group row">
                         <label for="submit" class="col-md-2 col-form-label"> </label>
@@ -125,24 +149,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
-            var max_fields = 30; //maximum input boxes allowed
-            var wrapper = $(".input_fields_wrap"); //Fields wrapper
-            var add_button = $(".add_field_button"); //Add button ID
-
-            var x = 1; //initlal text box count
-            $(add_button).click(function (e) { //on add input button click
-                e.preventDefault();
-                if (x < max_fields) { //max input box allowed
-                    x++; //text box increment
-                    $(wrapper).append("<div><input type='text' name='mytext[]' class='CommentInput'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
-                }
+            $("#yes").click(function () {
+                $("#tableClothPackages").show();
+            });
+            $("#no").click(function () {
+                $("#tableClothPackages").hide();
             });
 
-            $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
-                e.preventDefault();
-                $(this).parent('div').remove();
-                x--;
-            })
         });
     </script>
 

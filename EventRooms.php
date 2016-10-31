@@ -21,7 +21,8 @@
         $_SESSION['publish'] = $_POST['publish'];
         //$_SESSION['logo'] = $_POST['logo'];
 
-        if ($_FILES['logo']['error'][0] > 0) {
+        
+        if (is_uploaded_file($_FILES['logo']['tmp_name'])) {
             //echo "Sí";
             $imgData = file_get_contents($_FILES['logo']['tmp_name']);
             $imgName = $_FILES["logo"]["name"];

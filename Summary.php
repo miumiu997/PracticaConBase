@@ -6,6 +6,8 @@
         session_start();
         include_once("connection.php");
         $_SESSION['comments'] = $_GET['mytext'];
+    
+//        /var_dump($_SESSION);
     ?>
     
 <head>
@@ -928,7 +930,15 @@
                     success: function(data){
                         //alert('data');
                         //$('#form').submit();
-                        $('#modalInfo').append('<h1 class="col-md-12 col-form-label SummaryTitle text-left">Your request was successful, your request number is: ' + data + '</h1>'); 
+                        
+                        if ("<?php echo $_SESSION['modify'] ?>" == "1"){
+                            $('#modalInfo').append('<h1 class="col-md-12 col-form-label SummaryTitle text-left">Your request was successfully updated, your request number is: ' + data + '</h1>'); 
+                            
+                        } else {
+                            $('#modalInfo').append('<h1 class="col-md-12 col-form-label SummaryTitle text-left">Your request was successful, your request number is: ' + data + '</h1>'); 
+                            
+                        }
+                        
                         $("#modal").css("display", "block");
                     }
                });

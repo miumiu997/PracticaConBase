@@ -1,13 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <?php 
-        session_start();
-        $_SESSION['singles'] = $_POST['single'];
-        $_SESSION['doubles'] = $_POST['double'];
-        $_SESSION['suites'] = $_POST['suite'];
-    ?>
-    
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -46,9 +40,8 @@
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <!-- This title has to be changed according to the menu category selected-->
                     <li>
-                        <H1 class="NavEventPlanner"> Comments or Questions </H1>
+                        <H1 class="NavEventPlanner"> Additional Needs </H1>
                     </li>
 
                 </ul>
@@ -62,44 +55,17 @@
 
         <div class="container">
             <div class="row">
-                <!-- This is repeated by the amount of category options there are -->
-
-                <div class="row questionDiv">
-                    <h1 class="question">Is there anything else we can do for you ? </h1>
+                <div class="row">
+                    <div class="row questionDiv">
+                        <h1 class="question">Additional Needs</h1>
+                    </div>
                 </div>
 
-                <form method="get" action="Summary.php">
-                    <div>
-                        
-                        <?php 
-                        
-                            if ($_SESSION['modify'] != "1"){
-                                echo '<div class="input_fields_wrap">';
-                                echo '  <div>';
-                                echo '      <input type="text" name="mytext[]" class="CommentInput" />';
-                                echo '      <a href="#" class="remove_field RemoveBtn">Remove</a>';
-                                echo '  </div>';
-                                echo '</div>';
-                            } else {
-                                
-                                for ($i = 0; $i < count($_SESSION['comments']); $i += 1){
-                                    
-                                    echo '<div class="input_fields_wrap">';
-                                    echo '  <div>';
-                                    echo '      <input type="text" name="mytext[]" class="CommentInput" value="'. $_SESSION['comments'][$i] .'" />';
-                                    echo '      <a href="#" class="remove_field RemoveBtn">Remove</a>';
-                                    echo '  </div>';
-                                    echo '</div>';
-                                    
-                                }
-                                
-                            }
-                        
-                        ?>
-                        
-                        <button class="add_field_button AddBtn">Click here to add another requirement, comment or question. </button>
+                <!-- This is repeated by the amount of amenities there are -->
 
-                    </div>
+                <form method="get" action="Menus.html">
+                    <textarea rows="10" cols="60" placeholder="Tell us more about your needs specific  i.e. tablecloths, candles, flowers, face painters etc. We will do our best to find out and suggest the best options in the market for you"></textarea>
+
 
                     <div class="form-group row">
                         <label for="submit" class="col-md-2 col-form-label"> </label>
@@ -113,6 +79,8 @@
 
                 </form>
             </div>
+
+
         </div>
     </div>
 
@@ -122,29 +90,6 @@
 
     </footer>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var max_fields = 30; //maximum input boxes allowed
-            var wrapper = $(".input_fields_wrap"); //Fields wrapper
-            var add_button = $(".add_field_button"); //Add button ID
-
-            var x = 1; //initlal text box count
-            $(add_button).click(function (e) { //on add input button click
-                e.preventDefault();
-                if (x < max_fields) { //max input box allowed
-                    x++; //text box increment
-                    $(wrapper).append("<div><input type='text' name='mytext[]' class='CommentInput'/><a href='#' class='remove_field RemoveBtn'>Remove</a></div>"); //add input box
-                }
-            });
-
-            $(wrapper).on("click", ".remove_field", function (e) { //user click on remove text
-                e.preventDefault();
-                $(this).parent('div').remove();
-                x--;
-            })
-        });
-    </script>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
